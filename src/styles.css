@@ -1,0 +1,68 @@
+/* You can add global styles to this file, and also import other style files */
+
+body {
+  background: #1C1E23;
+}
+
+.headerClass {
+  background: #313641;
+}
+
+.contentArea {
+  margin-top: -20px;
+  padding: 0;
+  background: #1C1E23;
+}
+
+#sidebar {
+  background-color: #272A31;
+  color: #909297;
+}
+
+.headerContent {
+  color: white;
+  border: none;
+  box-shadow: 1px 1px 1px 0.5px white;
+}
+
+.height100 {
+  height: 100%;
+}
+
+.overflowScroll {
+  overflow: auto;
+}
+
+.height50 {
+  height: 50%;
+}
+
+.borderBottom {
+  border-bottom: 2px solid #313641;
+  box-shadow: 1px 1px 1px 0px #272A31;
+}
+
+.borderRight {
+  border-right: 2px solid #313641;
+  box-shadow: 1px 1px 1px 0px #272A31;
+}
+
+.navbar-default .navbar-nav>li>a,
+.navbar-default .navbar-brand {
+  color: white;
+}
+
+.whiteColor {
+  color: white;
+}
+
+#untrackedfiles {
+  color: #cccccc;
+}
+
+.filesList{
+  border-bottom: 1px solid #313641;
+  padding: 5px 15px;
+  
+}
+

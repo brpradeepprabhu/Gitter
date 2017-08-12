@@ -1,0 +1,73 @@
+<nav class="navbar navbar-default headerContent">
+  <div class="container-fluid headerClass">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+        aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Gitter</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li (click)="cloneClick()"><a><span><i class="fa fa-clone fa-2x"></i></span></a></li>
+        <li (click)="logs()"><a><span><i class="fa fa-toggle-up fa-2x"></i></span></a></li>
+        <li><a><span><i class="fa fa-toggle-down fa-2x"></i></span></a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class='container-fluid contentArea'>
+  <div class="ui-grid-col-2 height100 borderRight" id="sidebar">
+    sidebar
+  </div>
+  <div class='ui-grid-col-10 height100'>
+    <div class="ui-grid-col-12 height50 borderBottom" style="margin-top:3px">
+      <p-dataTable [value]="logData" scrollable="true" scrollWidth="100%" [scrollHeight]="dataTableHeight">
+        <p-column field="commit" header="Description" [style]="{'width':'60%'}"></p-column>
+        <p-column field="date" header="Date" [style]="{'width':'13%'}"></p-column>
+        <p-column field="name" header="Name" [style]="{'width':'13%'}"></p-column>
+        <p-column field="hash" header="Hash" [style]="{'width':'13%'}"></p-column>
+      </p-dataTable>
+    </div>
+    <div class="ui-grid-col-6 height50 borderRight" id="untrackedfiles">
+      <div class="ui-grid-col-12 height50 borderBottom overflowScroll">data</div>
+      <div class="ui-grid-col-12 height50 overflowScroll">
+
+        <div class="col-xs-12 filesList" *ngFor="let files of untrackedList">
+          <div class="col-xs-1"></div>
+          <div class=" col-xs-11"><span style="cursor: pointer;">{{files}} </span></div>
+        </div>
+      </div>
+    </div>
+    <div class="ui-grid-col-6 height50 overflowScroll borderRight">
+
+    </div>
+
+  </div>
+</div>
+<!-- <nav class="navbar navbar-fixed-bottom nav bg-primary">
+  <div class="container-fluid">
+    Footer Content
+
+  </div>
+</nav> -->
+<p-dialog header="Clone" [(visible)]="cloneDialog" [modal]="true">
+  <p-tabView>
+    <p-tabPanel header="Clone Repository">
+      <input pInputText type="text" [(ngModel)]="clonePath" placeholder="Clone URL">
+      <input pInputText type="text" [(ngModel)]="folderPath" placeholder="Folder URL">
+      <button pButton (click)="clone()" label="Clone"></button>
+    </p-tabPanel>
+    <p-tabPanel header="Browse Existing">
+      <input pInputText type="text" [(ngModel)]="existingFolder" placeholder="Clone URL">
+      <button pButton (click)="checkExistFolder()" label="Ok"></button>
+    </p-tabPanel>    
+  </p-tabView>
+
+</p-dialog>
