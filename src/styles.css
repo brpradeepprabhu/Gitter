@@ -76,6 +76,11 @@ body {
   text-overflow: ellipsis;
 }
 
+.navbar-nav>li {
+  width: 20%;
+  text-align: center;
+}
+
 .navbar-nav>li:hover {
   background: orange;
   color: white;
@@ -90,4 +95,11 @@ body {
   font-weight: bold;
   background: violet;
   color: white;
+}
+
+.commitText {
+  width: 400px;
+  height: 100px;
+  color:black;
+
 }

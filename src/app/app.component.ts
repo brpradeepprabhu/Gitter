@@ -17,6 +17,8 @@ export class AppComponent implements AfterViewInit {
   existingFolder: string;
   dataTableHeight: string;
   tags = [];
+  commitDialog: boolean = false;
+  commitMsg: string;
   branches = [];
   @ViewChild(DataTable) dt: DataTable;
   constructor(private http: Http, private gitServ: GitService, private cdr: ChangeDetectorRef) {
@@ -68,6 +70,22 @@ export class AppComponent implements AfterViewInit {
         this.displayAlert();
       }
     })
+  }
+  commitBtnClick() {
+    this.commitDialog = true;
+  }
+  commitClicked() {
+    console.log("commit")
+    this.gitServ.commit(this.commitMsg, this.currentWorkingDir).then((data: any) => {
+      console.log(data);
+      this.cloneDialog = false;
+      if (data !== "error") {
+        console.log(data);
+        this.refresh();
+      } else {
+        this.displayAlert();
+      }
+    });
   }
   displayAlert(msg?: any) {
     const message = (msg !== undefined) ? msg : "error";
@@ -197,18 +215,22 @@ export class AppComponent implements AfterViewInit {
       let prop;
       this.untrackedList = [];
       if (data !== "error") {
-        console.log(data);
         let filesList = data.split("\n");
+
         for (let i = 0; i < filesList.length; i++) {
           var fileNames = filesList[i].split(" ");
-          for (let m = 0; m < fileNames.length; m++) {
-            if (fileNames[m].trim() == "") {
-              fileNames.splice(m, 1);
-            }
-          }
+          // for (let m = 0; m < fileNames.length; m++) {
+          //   if (fileNames[m].trim() == "") {
+          //     fileNames.splice(m, 1);
+          //   }
+          // }
+          console.log(fileNames);
           if (fileNames.length > 0) {
             if ((fileNames[0] == "MM") || (fileNames[0] == "??")) {
               this.untrackedList.push(fileNames[1])
+            }
+            if ((fileNames[1] == "M") || ((fileNames[1] == "D"))) {
+              this.untrackedList.push(fileNames[2])
             }
           }
         }

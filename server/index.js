@@ -35,6 +35,27 @@ app.post('/clone', function (req, res) {
   });;
 
 });
+app.post('/commit', function (req, res) {
+  let clonePath = req.body.folder;
+  let message = req.body.message;
+  console.log(message)
+  console.log(clonePath)
+  var commands =
+    'git commit -m ' + message;
+  var options = {
+    cwd: clonePath
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes != 0) {
+      res.send("error");
+    } else {
+      res.send("success");
+    }
+  }, function (err) {
+    res.send(err);
+  });;
+
+});
 app.post('/getTags', function (req, res, next) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
@@ -168,7 +189,6 @@ app.post('/tracked', function (req, res, next) {
     if (exitCodes == 0) {
       if (outdata !== "error") {
         res.json((outdata));
-        console.log(outdata);
       } else {
         res.send("error");
       }
@@ -180,13 +200,12 @@ app.post('/tracked', function (req, res, next) {
 app.post('/unStageAll', function (req, res, next) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
-  let commands = 'git add .';
+  let commands = 'git reset';
   let outdata = "";
   let options = {
     cwd: clonePath,
     onData: (data) => {
       outdata += data;
-
     },
     onError: (err) => {
       outdata = "error";
@@ -225,7 +244,6 @@ app.post('/untracked', function (req, res, next) {
     if (exitCodes == 0) {
       if (outdata !== "error") {
         res.json((outdata));
-        console.log(outdata);
       } else {
         res.send("error");
       }

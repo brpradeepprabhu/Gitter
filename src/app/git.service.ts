@@ -18,6 +18,11 @@ export class GitService {
       .then((data) => { return data; })
       .catch(this.handleError);
   }
+  commit(message: string, folderPath: string): Promise<any> {
+    return this.http.post(environment.serverurl + "commit", { message: message, folder: folderPath }).toPromise()
+      .then((data) => { return data; })
+      .catch(this.handleError);
+  }
   checkExistFolder(existingFolder: string): Promise<any> {
     console.log("check exist")
     return this.http.post(environment.serverurl + "folderCheck", { folder: existingFolder }).toPromise()
@@ -52,7 +57,6 @@ export class GitService {
     return this.http.post(environment.serverurl + "unStageAll ", { folder: currentWorkingDir }).toPromise()
       .then((data: any) => { return (data._body) })
       .catch(this.handleError);
-
   }
   untrackedFile(cwd: string): Promise<any> {
     return this.http.post(environment.serverurl + "untracked ", { folder: cwd }).toPromise()
