@@ -78,7 +78,7 @@ export class AppComponent implements AfterViewInit {
     console.log("commit")
     this.gitServ.commit(this.commitMsg, this.currentWorkingDir).then((data: any) => {
       console.log(data);
-      this.cloneDialog = false;
+      this.commitDialog = false;
       if (data !== "error") {
         console.log(data);
         this.refresh();
