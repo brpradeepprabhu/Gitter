@@ -22,7 +22,7 @@ export class AppComponent implements AfterViewInit {
   constructor(private http: Http, private gitServ: GitService, private cdr: ChangeDetectorRef) {
 
   }
-  currentWorkingDir = "D:/gitter";
+  currentWorkingDir = "G:/Gitter";
   ngAfterViewInit() {
     this.resizeWindow();
     window.addEventListener('resize', this.resizeWindow.bind(this))
@@ -37,19 +37,29 @@ export class AppComponent implements AfterViewInit {
 
     this.cdr.detectChanges();
   }
+  checkExistFolder() {
+    if (this.existingFolder) {
+      this.gitServ.checkExistFolder(this.existingFolder).then((data: any) => {
+        if (data !== "error") {
+          this.currentWorkingDir = this.existingFolder;
+          this.cloneDialog = false;
+          this.refresh();
+        }
+        else {
+          this.displayAlert();
+        }
+      });
+    } else {
+      this.displayAlert("please enter the folder")
+    }
+  }
   cloneClick() {
     this.cloneDialog = true;
   }
-  refresh() {
-    this.logs();
-    this.trackedFiles();
-    this.getTags();
-    this.getBranches();
-  }
+
   clone() {
     this.gitServ.clone("https://brpradeepprabhu@bitbucket.org/brpradeepprabhu/gitter.git", "D:/bitbucket").then((data: any) => {
       const response = data;
-      console.log('clone', response)
       if (response !== "error") {
         this.logs();
         this.cloneDialog = false;
@@ -69,13 +79,15 @@ export class AppComponent implements AfterViewInit {
         {
           label: 'Branches',
           icon: 'fa-tree',
-          items: []
+          items: [],
+          expanded: true,
         }];
       if (data !== "error") {
         let branchArray = data.split("\n");
-        console.log(branchArray)
         for (let i = 0; i < branchArray.length; i++) {
-          this.branches[0].items.push({ label: branchArray[i] });
+          if (branchArray[i].trim() !== "") {
+            this.branches[0].items.push({ label: branchArray[i] });
+          }
         }
       }
       else {
@@ -89,13 +101,15 @@ export class AppComponent implements AfterViewInit {
         {
           label: 'Tags',
           icon: 'fa-tags',
-          items: []
+          items: [],
+          expanded: true,
         }];
       if (data !== "error") {
         let tagArray = data.split("\n");
-        console.log(tagArray)
         for (let i = 0; i < tagArray.length; i++) {
-          this.tags[0].items.push({ label: tagArray[i] });
+          if (tagArray[i].trim() !== "") {
+            this.tags[0].items.push({ label: tagArray[i] });
+          }
         }
       }
       else {
@@ -130,13 +144,61 @@ export class AppComponent implements AfterViewInit {
       this.dt.value = this.logData;
     })
   }
-
+  refresh() {
+    this.logs();
+    this.unTrackedFiles();
+    this.trackedFiles();
+    this.getTags();
+    this.getBranches();
+  }
+  stageAllClicked() {
+    this.gitServ.stageAll(this.currentWorkingDir).then((data: any) => {
+      if (data !== "error") {
+        this.refresh();
+      } else {
+        this.displayAlert();
+      }
+    });
+  }
   trackedFiles() {
     this.gitServ.trackedFile(this.currentWorkingDir).then((data: any) => {
       let prop;
+      this.trackedList = [];
       if (data !== "error") {
         let filesList = data.split("\n");
+        for (let i = 0; i < filesList.length; i++) {
+          var fileNames = filesList[i].split("	");
+          for (let m = 0; m < fileNames.length; m++) {
+            if (fileNames[m].trim() == "") {
+              fileNames.splice(m, 1);
+            }
+          }
+          if (fileNames.length > 0) {
+            this.trackedList.push(fileNames[1]);
 
+          }
+        }
+      } else {
+        this.displayAlert();
+      }
+    });
+  }
+  unStageAllClicked() {
+    this.gitServ.unStageAll(this.currentWorkingDir).then((data: any) => {
+      if (data !== "error") {
+        this.refresh();
+      } else {
+        this.displayAlert();
+      }
+    });
+  }
+  unTrackedFiles() {
+    this.gitServ.untrackedFile(this.currentWorkingDir).then((data: any) => {
+      let prop;
+      this.untrackedList = [];
+      if (data !== "error") {
+        console.log(data);
+        let filesList = data.split("\n");
         for (let i = 0; i < filesList.length; i++) {
           var fileNames = filesList[i].split(" ");
           for (let m = 0; m < fileNames.length; m++) {
@@ -145,11 +207,8 @@ export class AppComponent implements AfterViewInit {
             }
           }
           if (fileNames.length > 0) {
-            if ((fileNames[0] == "??") || ((fileNames[0] == "M"))) {
-              this.untrackedList.push(fileNames[1]);
-            }
-            else {
-              this.trackedList.push(fileNames[1]);
+            if ((fileNames[0] == "MM") || (fileNames[0] == "??")) {
+              this.untrackedList.push(fileNames[1])
             }
           }
         }
@@ -158,21 +217,6 @@ export class AppComponent implements AfterViewInit {
       }
     });
   }
-  checkExistFolder() {
-    if (this.existingFolder) {
-      this.gitServ.checkExistFolder(this.existingFolder).then((data: any) => {
-        if (data !== "error") {
-          this.currentWorkingDir = this.existingFolder;
-          this.cloneDialog = false;
-          this.refresh();
-        }
-        else {
-          this.displayAlert();
-        }
-      });
-    } else {
-      this.displayAlert("please enter the folder")
-    }
-  }
+
 
 }

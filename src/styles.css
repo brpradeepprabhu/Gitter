@@ -60,9 +60,34 @@ body {
   color: #cccccc;
 }
 
-.filesList{
+.filesList {
   border-bottom: 1px solid #313641;
   padding: 5px 15px;
-  
 }
 
+.filesList:hover {
+  background: #f58400;
+  color: white;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navbar-nav>li:hover {
+  background: orange;
+  color: white;
+}
+
+.backgroundColor {
+  background: orange;
+  color: black;
+}
+
+.fontBold {
+  font-weight: bold;
+  background: violet;
+  color: white;
+}

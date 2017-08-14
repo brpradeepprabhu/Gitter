@@ -51,7 +51,16 @@ app.post('/getTags', function (req, res, next) {
     }
   };
   nrc.run(commands, options).then(function (exitCodes) {
-    res.json((outdata));
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.json((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+
   });
 });
 app.post('/getBranches', function (req, res, next) {
@@ -70,7 +79,15 @@ app.post('/getBranches', function (req, res, next) {
     }
   };
   nrc.run(commands, options).then(function (exitCodes) {
-    res.json((outdata));
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.json((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
   });
 });
 app.post('/log', function (req, res, next) {
@@ -89,14 +106,24 @@ app.post('/log', function (req, res, next) {
     }
   };
   nrc.run(commands, options).then(function (exitCodes) {
-    res.send(outdata);
+
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.send((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+
   });
 
 });
-app.post('/tracked', function (req, res, next) {
-  res.setHeader('Content-Type', 'application/json');
+app.post('/stageAll', function (req, res, next) {
+  res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
-  commands = 'git status -s';
+  let commands = 'git add .';
   let outdata = "";
   let options = {
     cwd: clonePath,
@@ -109,16 +136,104 @@ app.post('/tracked', function (req, res, next) {
     }
   };
   nrc.run(commands, options).then(function (exitCodes) {
-    if (outdata !== "error") {
-      res.json((outdata));
-      console.log(outdata)
 
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.send((outdata));
+      } else {
+        res.send("error");
+      }
     } else {
-      res.send(outdata);
+      res.send("error");
+    }
+
+  });
+
+});
+app.post('/tracked', function (req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
+  let clonePath = req.body.folder;
+  commands = ' git diff --staged --name-status';
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.json((outdata));
+        console.log(outdata);
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
     }
   });
 })
+app.post('/unStageAll', function (req, res, next) {
+  res.setHeader('Content-Type', 'text/plain');
+  let clonePath = req.body.folder;
+  let commands = 'git add .';
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
 
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.send((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+
+  });
+
+});
+app.post('/untracked', function (req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
+  let clonePath = req.body.folder;
+  commands = ' git status -s';
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.json((outdata));
+        console.log(outdata);
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+  });
+})
 app.post('/folderCheck', function (req, res, next) {
   res.setHeader('Content-Type', 'application/json');
   let clonePath = req.body.folder;
@@ -134,10 +249,14 @@ app.post('/folderCheck', function (req, res, next) {
     }
   };
   nrc.run(commands, options).then(function (exitCodes) {
-    if (outdata !== "error") {
-      res.send(outdata);
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.send((outdata));
+      } else {
+        res.send("error");
+      }
     } else {
-      res.send(outdata);
+      res.send("error");
     }
   });
 
