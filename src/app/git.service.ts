@@ -23,8 +23,7 @@ export class GitService {
       .then((data) => { return data; })
       .catch(this.handleError);
   }
-  checkExistFolder(existingFolder: string): Promise<any> {
-    console.log("check exist")
+  checkExistFolder(existingFolder: string): Promise<any> { 
     return this.http.post(environment.serverurl + "folderCheck", { folder: existingFolder }).toPromise()
       .then((data: any) => { return data._body; })
       .catch(this.handleError);

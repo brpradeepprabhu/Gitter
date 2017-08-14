@@ -41,11 +41,23 @@ app.post('/commit', function (req, res) {
   console.log(message)
   console.log(clonePath)
   var commands =
-    'git commit -m ' + message;
+    'git commit -m "' + message + '"';
+  let outdata = "";
   var options = {
-    cwd: clonePath
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+      console.log(outdata);
+
+    },
+    onError: (err) => {
+      outdata = "error";
+      console.log(err);
+
+    }
   };
   nrc.run(commands, options).then(function (exitCodes) {
+    console.log(exitCodes);
     if (exitCodes != 0) {
       res.send("error");
     } else {
