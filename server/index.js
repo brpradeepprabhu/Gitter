@@ -35,9 +35,46 @@ app.post('/clone', function (req, res) {
   });;
 
 });
+app.post('/getTags', function (req, res, next) {
+  res.setHeader('Content-Type', 'text/plain');
+  let clonePath = req.body.folder;
+  let commands = 'git tag';
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    res.json((outdata));
+  });
+});
+app.post('/getBranches', function (req, res, next) {
+  res.setHeader('Content-Type', 'text/plain');
+  let clonePath = req.body.folder;
+  let commands = 'git branch';
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    res.json((outdata));
+  });
+});
 app.post('/log', function (req, res, next) {
   res.setHeader('Content-Type', 'text/plain');
-
   let clonePath = req.body.folder;
   let commands = 'git log --pretty=format:%h%x09%x09%cn%x09%x09%ci%x09%x09%s$$$';
   let outdata = "";
@@ -45,6 +82,7 @@ app.post('/log', function (req, res, next) {
     cwd: clonePath,
     onData: (data) => {
       outdata += data;
+
     },
     onError: (err) => {
       outdata = "error";
@@ -58,12 +96,13 @@ app.post('/log', function (req, res, next) {
 app.post('/tracked', function (req, res, next) {
   res.setHeader('Content-Type', 'application/json');
   let clonePath = req.body.folder;
-  let commands = 'git diff --name-only';
+  commands = 'git status -s';
   let outdata = "";
   let options = {
     cwd: clonePath,
     onData: (data) => {
       outdata += data;
+
     },
     onError: (err) => {
       outdata = "error";
@@ -71,35 +110,15 @@ app.post('/tracked', function (req, res, next) {
   };
   nrc.run(commands, options).then(function (exitCodes) {
     if (outdata !== "error") {
-      res.json(shellParser(outdata));
+      res.json((outdata));
+      console.log(outdata)
+
     } else {
       res.send(outdata);
     }
   });
 })
-app.post('/untracked', function (req, res, next) {
-  res.setHeader('Content-Type', 'application/json');
-  let clonePath = req.body.folder;
-  let commands = 'git ls-files --others --exclude-standard';
-  let outdata = "";
-  let options = {
-    cwd: clonePath,
-    onData: (data) => {
-      outdata += data;
-    },
-    onError: (err) => {
-      outdata = "error";
-    }
-  };
-  nrc.run(commands, options).then(function (exitCodes) {
-    if (outdata !== "error") {
-      res.json(shellParser(outdata));
-    } else {
-      res.send(outdata);
-    }
-  });
 
-});
 app.post('/folderCheck', function (req, res, next) {
   res.setHeader('Content-Type', 'application/json');
   let clonePath = req.body.folder;

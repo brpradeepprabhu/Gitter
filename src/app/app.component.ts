@@ -13,8 +13,11 @@ export class AppComponent implements AfterViewInit {
   logData = [];
   cloneDialog = false;
   untrackedList = [];
+  trackedList = [];
   existingFolder: string;
   dataTableHeight: string;
+  tags = [];
+  branches = [];
   @ViewChild(DataTable) dt: DataTable;
   constructor(private http: Http, private gitServ: GitService, private cdr: ChangeDetectorRef) {
 
@@ -24,6 +27,7 @@ export class AppComponent implements AfterViewInit {
     this.resizeWindow();
     window.addEventListener('resize', this.resizeWindow.bind(this))
     this.refresh();
+
 
   }
   resizeWindow() {
@@ -38,8 +42,9 @@ export class AppComponent implements AfterViewInit {
   }
   refresh() {
     this.logs();
-    this.untrackedfiles();
     this.trackedFiles();
+    this.getTags();
+    this.getBranches();
   }
   clone() {
     this.gitServ.clone("https://brpradeepprabhu@bitbucket.org/brpradeepprabhu/gitter.git", "D:/bitbucket").then((data: any) => {
@@ -55,8 +60,48 @@ export class AppComponent implements AfterViewInit {
     })
   }
   displayAlert(msg?: any) {
-    const message = (msg !== undefined) ? msg : "error";   
+    const message = (msg !== undefined) ? msg : "error";
     alert(message)
+  }
+  getBranches() {
+    this.gitServ.getBranches(this.currentWorkingDir).then((data: any) => {
+      this.branches = [
+        {
+          label: 'Branches',
+          icon: 'fa-tree',
+          items: []
+        }];
+      if (data !== "error") {
+        let branchArray = data.split("\n");
+        console.log(branchArray)
+        for (let i = 0; i < branchArray.length; i++) {
+          this.branches[0].items.push({ label: branchArray[i] });
+        }
+      }
+      else {
+        this.displayAlert();
+      }
+    })
+  }
+  getTags() {
+    this.gitServ.getTags(this.currentWorkingDir).then((data: any) => {
+      this.tags = [
+        {
+          label: 'Tags',
+          icon: 'fa-tags',
+          items: []
+        }];
+      if (data !== "error") {
+        let tagArray = data.split("\n");
+        console.log(tagArray)
+        for (let i = 0; i < tagArray.length; i++) {
+          this.tags[0].items.push({ label: tagArray[i] });
+        }
+      }
+      else {
+        this.displayAlert();
+      }
+    })
   }
   logs() {
     let logFullArray = []
@@ -84,37 +129,28 @@ export class AppComponent implements AfterViewInit {
       }
       this.dt.value = this.logData;
     })
-    this.untrackedfiles();
   }
-  untrackedfiles() {
-    this.gitServ.untrackedFile(this.currentWorkingDir).then((data: any) => {
-      let prop;
-      if (data !== "error") {
-        for (var i = 0; i < data.length; i++) {
-          for (var files in data[i]) {
-            if (prop !== files) {
-              this.untrackedList.push(files);
-              prop = files;
-            }
-            this.untrackedList.push(data[i][files])
-          }
-        }
-      } else {
-        this.displayAlert();
-      }
-    });
-  }
+
   trackedFiles() {
     this.gitServ.trackedFile(this.currentWorkingDir).then((data: any) => {
       let prop;
       if (data !== "error") {
-        for (var i = 0; i < data.length; i++) {
-          for (var files in data[i]) {
-            if (prop !== files) {
-              this.untrackedList.push(files);
-              prop = files;
+        let filesList = data.split("\n");
+
+        for (let i = 0; i < filesList.length; i++) {
+          var fileNames = filesList[i].split(" ");
+          for (let m = 0; m < fileNames.length; m++) {
+            if (fileNames[m].trim() == "") {
+              fileNames.splice(m, 1);
             }
-            this.untrackedList.push(data[i][files])
+          }
+          if (fileNames.length > 0) {
+            if ((fileNames[0] == "??") || ((fileNames[0] == "M"))) {
+              this.untrackedList.push(fileNames[1]);
+            }
+            else {
+              this.trackedList.push(fileNames[1]);
+            }
           }
         }
       } else {

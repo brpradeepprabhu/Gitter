@@ -22,9 +22,12 @@
     </div>
   </div>
 </nav>
-<div class='container-fluid contentArea'>
+<div class='container-fluid contentArea '>
   <div class="ui-grid-col-2 height100 borderRight" id="sidebar">
-    sidebar
+    <p-panelMenu [model]="branches"></p-panelMenu>
+    <p-panelMenu [model]="tags"></p-panelMenu>
+    <p-panelMenu [model]="remotes"></p-panelMenu>
+    <p-panelMenu [model]="stashes"></p-panelMenu>
   </div>
   <div class='ui-grid-col-10 height100'>
     <div class="ui-grid-col-12 height50 borderBottom" style="margin-top:3px">
@@ -36,7 +39,12 @@
       </p-dataTable>
     </div>
     <div class="ui-grid-col-6 height50 borderRight" id="untrackedfiles">
-      <div class="ui-grid-col-12 height50 borderBottom overflowScroll">data</div>
+      <div class="ui-grid-col-12 height50 borderBottom overflowScroll">
+        <div class="col-xs-12 filesList" *ngFor="let files of trackedList">
+          <div class="col-xs-1"></div>
+          <div class=" col-xs-11"><span style="cursor: pointer;">{{files}} </span></div>
+        </div>
+      </div>
       <div class="ui-grid-col-12 height50 overflowScroll">
 
         <div class="col-xs-12 filesList" *ngFor="let files of untrackedList">
@@ -67,7 +75,7 @@
     <p-tabPanel header="Browse Existing">
       <input pInputText type="text" [(ngModel)]="existingFolder" placeholder="Clone URL">
       <button pButton (click)="checkExistFolder()" label="Ok"></button>
-    </p-tabPanel>    
+    </p-tabPanel>
   </p-tabView>
 
 </p-dialog>

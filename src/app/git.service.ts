@@ -24,22 +24,33 @@ export class GitService {
       .catch(this.handleError);
 
   }
+  getTags(currentWorkingDir): Promise<any> {
+    return this.http.post(environment.serverurl + "getTags ", { folder: currentWorkingDir }).toPromise()
+      .then((data: any) => { return JSON.parse(data._body); })
+      .catch(this.handleError);
+
+  }
+  getBranches(currentWorkingDir): Promise<any> {
+    return this.http.post(environment.serverurl + "getBranches ", { folder: currentWorkingDir }).toPromise()
+      .then((data: any) => { return JSON.parse(data._body); })
+      .catch(this.handleError);
+
+  }
   untrackedFile(cwd: string): Promise<any> {
     return this.http.post(environment.serverurl + "untracked ", { folder: cwd }).toPromise()
       .then((data: any) => { return JSON.parse(data._body); })
       .catch(this.handleError);
-    ;
   }
   trackedFile(cwd: string): Promise<any> {
     return this.http.post(environment.serverurl + "tracked ", { folder: cwd }).toPromise()
-      .then((data: any) => { return data._body; })
+      .then((data: any) => { return JSON.parse(data._body); })
       .catch(this.handleError);
     ;
   }
   checkExistFolder(existingFolder: string): Promise<any> {
     console.log("check exist")
     return this.http.post(environment.serverurl + "folderCheck", { folder: existingFolder }).toPromise()
-      .then((data: any) => { console.log(data); return data._body; })
+      .then((data: any) => { return data._body; })
       .catch(this.handleError);
     ;
   }

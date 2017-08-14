@@ -3,7 +3,8 @@
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { DataTableModule, DialogModule, ButtonModule, TabViewModule, InputTextModule } from 'primeng/primeng';
+import { DataTableModule, PanelMenuModule, MenuItem, DialogModule, ButtonModule, TabViewModule, InputTextModule } from 'primeng/primeng';
+
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
@@ -23,7 +24,9 @@ import { GitService } from "./git.service";
     DataTableModule,
     DialogModule,
     InputTextModule,
-    TabViewModule
+    TabViewModule,
+    PanelMenuModule, 
+    
 
   ],
   providers: [GitService],
