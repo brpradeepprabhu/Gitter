@@ -15,7 +15,7 @@ export class AppComponent implements AfterViewInit {
   untrackedList = [];
   trackedList = [];
   existingFolder: string;
-  dataTableHeight: string;
+  dataTableHeight: string = "200px";
   tags = [];
   commitDialog = false;
   commitMsg: string;
@@ -38,8 +38,12 @@ export class AppComponent implements AfterViewInit {
 
   resizeWindow() {
     const ele: any = document.getElementsByClassName('contentArea')[0];
-    ele.style.height = window.innerHeight - 65 + 'px';
+    ele.style.height = window.innerHeight - 80 + 'px';
     ele.style.width = window.innerWidth + 'px';
+    this.dataTableHeight = (window.innerHeight) / 2 - 80 + 'px';
+    console.log(this.dataTableHeight);
+    console.log(this.dt.scrollHeight);
+    
     this.cdr.detectChanges();
   }
   checkExistFolder() {
