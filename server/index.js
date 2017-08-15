@@ -123,6 +123,96 @@ app.post('/getBranches', function (req, res, next) {
     }
   });
 });
+app.post('/getPushCount', function (req, res, next) {
+  res.setHeader('Content-Type', 'application/text');
+  let clonePath = req.body.folder;
+  let currentBranch = req.body.branch;
+  let currentOrginBranch = req.body.orginBranch;
+  currentBranch = (currentBranch) ? currentBranch : 'master';
+  let commands = 'git rev-list --left-right ' + currentBranch + '...' + currentOrginBranch + " --count";
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.json((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+  });
+
+});
+app.post('/getCurrentBranchOrgin', function (req, res, next) {
+  res.setHeader('Content-Type', 'application/text');
+  let clonePath = req.body.folder;
+  let currentBranch = req.body.branch;
+  currentBranch = (currentBranch) ? currentBranch : 'master';
+  let commands = 'git rev-parse --abbrev-ref --symbolic-full-name @{u}';
+  console.log("foldeR", clonePath);
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.send((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+  });
+
+});
+app.post('/push', function (req, res, next) {
+  res.setHeader('Content-Type', 'application/text');
+  let clonePath = req.body.folder;
+  let currentBranch = req.body.branch;
+  let currentOrginBranch = req.body.orginBranch;
+  currentBranch = (currentBranch) ? currentBranch : 'master';
+  let commands = 'git push';
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.json((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+  });
+
+});
 app.post('/log', function (req, res, next) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
@@ -292,36 +382,7 @@ app.post('/folderCheck', function (req, res, next) {
   });
 
 });
-app.post('/pushCount', function (req, res, next) {
-  res.setHeader('Content-Type', 'application/json');
-  let clonePath = req.body.folder;
-  let currentBranch = req.body.currentBranch;
-  currentBranch = (currentBranch) ? currentBranch : 'master';
-  let commands = 'git rev-list --count ' + currentBranch;
-  console.log(clonePath);
-  let outdata = "";
-  let options = {
-    cwd: clonePath,
-    onData: (data) => {
-      outdata += data;
-    },
-    onError: (err) => {
-      outdata = "error";
-    }
-  };
-  nrc.run(commands, options).then(function (exitCodes) {
-    if (exitCodes == 0) {
-      if (outdata !== "error") {
-        res.send((outdata));
-      } else {
-        res.send("error");
-      }
-    } else {
-      res.send("error");
-    }
-  });
 
-});
 var server = app.listen(8000, function () {
   console.log("server started");
 

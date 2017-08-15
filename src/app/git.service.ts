@@ -46,6 +46,27 @@ export class GitService {
       .catch(this.handleError);
 
   }
+  getCurrentBranchOrgin(currentWorkingDir: string): Promise<any> {
+    return this.http.post(environment.serverurl + 'getCurrentBranchOrgin ', { folder: currentWorkingDir }).toPromise()
+      .then((data: any) => { return (data._body); })
+      .catch(this.handleError);
+
+  }
+  getPushCount(branch: string, orginBranch: string, folderPath: string): Promise<any> {
+    console.log(branch, folderPath)
+    return this.http.post(environment.serverurl + 'getPushCount', {
+      folder: folderPath, branch: branch,
+      orginBranch: orginBranch
+    }).toPromise()
+      .then((data: any) => { return this.parseData(data._body); })
+      .catch(this.handleError);
+  };
+  push(currentWorkingDir: string): Promise<any> {
+    return this.http.post(environment.serverurl + 'push ', { folder: currentWorkingDir }).toPromise()
+      .then((data: any) => { return (data._body); })
+      .catch(this.handleError);
+
+  }
   stageAll(currentWorkingDir: string): Promise<any> {
     return this.http.post(environment.serverurl + 'stageAll ', { folder: currentWorkingDir }).toPromise()
       .then((data: any) => { return (data._body); })

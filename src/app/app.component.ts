@@ -21,6 +21,10 @@ export class AppComponent implements AfterViewInit {
   commitMsg: string;
   branches = [];
   currentWorkingDir = 'G:/Gitter';
+  currentBranch;
+  currentBranchOrgin;
+  pushCount = 0;
+  pullCount = 0;
   @ViewChild(DataTable) dt: DataTable;
   constructor(private http: Http, private gitServ: GitService, private cdr: ChangeDetectorRef) {
 
@@ -102,15 +106,37 @@ export class AppComponent implements AfterViewInit {
             const splitBranch = branchArray[i].split(' ');
 
             const fontClass = (splitBranch[0] === '*') ? 'boldClass' : '';
-            console.log(splitBranch);
+            if (splitBranch[0] === '*') {
+              this.currentBranch = splitBranch[1];
+            }
             const branchText = branchArray[i].replace('*', '');
+
             this.branches[0].items.push({ label: branchText, styleClass: fontClass });
+
           }
         }
+        this.getCurrentBranchOrgin();
       } else {
         this.displayAlert();
       }
     });
+  }
+  getCurrentBranchOrgin() {
+    this.gitServ.getCurrentBranchOrgin(this.currentWorkingDir).then((data: any) => {
+      this.currentBranchOrgin = data;
+      console.log(data);
+      this.getPushCount();
+    });
+  }
+  getPushCount() {
+    if (this.currentBranchOrgin) {
+      this.gitServ.getPushCount(this.currentBranch, this.currentBranchOrgin, this.currentWorkingDir).then((data: any) => {
+        let pushPullArray = data.split('	');
+        console.log(pushPullArray);
+        this.pushCount = pushPullArray[0];
+        this.pullCount = pushPullArray[1];
+      });
+    }
   }
   getTags() {
     this.gitServ.getTags(this.currentWorkingDir).then((data: any) => {
@@ -159,12 +185,18 @@ export class AppComponent implements AfterViewInit {
       this.dt.value = this.logData;
     });
   }
+  push() {
+    this.gitServ.push(this.currentWorkingDir).then(data => {
+      console.log(data);
+    })
+  }
   refresh() {
     this.logs();
     this.unTrackedFiles();
     this.trackedFiles();
     this.getTags();
     this.getBranches();
+
   }
   stageAllClicked() {
     this.gitServ.stageAll(this.currentWorkingDir).then((data: any) => {

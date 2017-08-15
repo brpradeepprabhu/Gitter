@@ -24,13 +24,13 @@
         <li (click)="logs()">
           <a>
             <div><i class="fa fa-toggle-up fa-2x"></i></div>
-            <div>Push</div>
+            <div>Push<span>{{pushCount}}</span></div>
           </a>
         </li>
         <li>
           <a>
             <div><i class="fa fa-toggle-down fa-2x"></i></div>
-            <div>Pull</div>
+            <div>Pull <span>{{pulCount}}</span></div>
           </a>
         </li>
         <li (click)="commitBtnClick();">
