@@ -14,62 +14,62 @@ export class GitService {
 
   }
   clone(path: string, folderPath: string): Promise<any> {
-    return this.http.post(environment.serverurl + "clone", { url: path, folder: folderPath }).toPromise()
+    return this.http.post(environment.serverurl + 'clone', { url: path, folder: folderPath }).toPromise()
       .then((data) => { return data; })
       .catch(this.handleError);
   }
   commit(message: string, folderPath: string): Promise<any> {
-    return this.http.post(environment.serverurl + "commit", { message: message, folder: folderPath }).toPromise()
+    return this.http.post(environment.serverurl + 'commit', { message: message, folder: folderPath }).toPromise()
       .then((data) => { return data; })
       .catch(this.handleError);
   }
-  checkExistFolder(existingFolder: string): Promise<any> { 
-    return this.http.post(environment.serverurl + "folderCheck", { folder: existingFolder }).toPromise()
+  checkExistFolder(existingFolder: string): Promise<any> {
+    return this.http.post(environment.serverurl + 'folderCheck', { folder: existingFolder }).toPromise()
       .then((data: any) => { return data._body; })
       .catch(this.handleError);
   }
   logs(currentWorkingDir): Promise<any> {
-    return this.http.post(environment.serverurl + "log ", { folder: currentWorkingDir }).toPromise()
+    return this.http.post(environment.serverurl + 'log ', { folder: currentWorkingDir }).toPromise()
       .then((data) => { return data; })
       .catch(this.handleError);
 
   }
   getTags(currentWorkingDir): Promise<any> {
-    return this.http.post(environment.serverurl + "getTags ", { folder: currentWorkingDir }).toPromise()
-      .then((data: any) => { return this.parseData(data._body) })
+    return this.http.post(environment.serverurl + 'getTags ', { folder: currentWorkingDir }).toPromise()
+      .then((data: any) => { return this.parseData(data._body); })
       .catch(this.handleError);
 
   }
   getBranches(currentWorkingDir): Promise<any> {
-    return this.http.post(environment.serverurl + "getBranches ", { folder: currentWorkingDir }).toPromise()
-      .then((data: any) => { return this.parseData(data._body) })
+    return this.http.post(environment.serverurl + 'getBranches ', { folder: currentWorkingDir }).toPromise()
+      .then((data: any) => { return this.parseData(data._body); })
       .catch(this.handleError);
 
   }
   stageAll(currentWorkingDir: string): Promise<any> {
-    return this.http.post(environment.serverurl + "stageAll ", { folder: currentWorkingDir }).toPromise()
-      .then((data: any) => { return (data._body) })
+    return this.http.post(environment.serverurl + 'stageAll ', { folder: currentWorkingDir }).toPromise()
+      .then((data: any) => { return (data._body); })
       .catch(this.handleError);
 
   }
   unStageAll(currentWorkingDir: string): Promise<any> {
-    return this.http.post(environment.serverurl + "unStageAll ", { folder: currentWorkingDir }).toPromise()
-      .then((data: any) => { return (data._body) })
+    return this.http.post(environment.serverurl + 'unStageAll ', { folder: currentWorkingDir }).toPromise()
+      .then((data: any) => { return (data._body); })
       .catch(this.handleError);
   }
   untrackedFile(cwd: string): Promise<any> {
-    return this.http.post(environment.serverurl + "untracked ", { folder: cwd }).toPromise()
-      .then((data: any) => { return this.parseData(data._body) })
+    return this.http.post(environment.serverurl + 'untracked ', { folder: cwd }).toPromise()
+      .then((data: any) => { return this.parseData(data._body); })
       .catch(this.handleError);
   }
   trackedFile(cwd: string): Promise<any> {
-    return this.http.post(environment.serverurl + "tracked ", { folder: cwd }).toPromise()
-      .then((data: any) => { return this.parseData(data._body) })
+    return this.http.post(environment.serverurl + 'tracked ', { folder: cwd }).toPromise()
+      .then((data: any) => { return this.parseData(data._body); })
       .catch(this.handleError);
   }
 
   parseData(data) {
-    if (data == "error") {
+    if (data === 'error') {
       return data;
     } else {
       return JSON.parse(data);

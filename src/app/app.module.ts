@@ -5,12 +5,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DataTableModule, PanelMenuModule, MenuItem, DialogModule, ButtonModule, TabViewModule, InputTextModule } from 'primeng/primeng';
 
-import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { HttpModule } from "@angular/http";
-import { AppComponent } from "./app.component";
-import { GitService } from "./git.service";
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { AppComponent } from './app.component';
+import { GitService } from './git.service';
 @NgModule({
   declarations: [
     AppComponent
@@ -25,8 +25,8 @@ import { GitService } from "./git.service";
     DialogModule,
     InputTextModule,
     TabViewModule,
-    PanelMenuModule, 
-    
+    PanelMenuModule,
+
 
   ],
   providers: [GitService],
