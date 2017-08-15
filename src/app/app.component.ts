@@ -38,12 +38,17 @@ export class AppComponent implements AfterViewInit {
 
   resizeWindow() {
     const ele: any = document.getElementsByClassName('contentArea')[0];
-    ele.style.height = window.innerHeight - 80 + 'px';
+    const headerNav = document.getElementsByClassName("headerContent")[0];
+    var style = window.getComputedStyle(headerNav);
+    let height: any = parseFloat(style.height) + parseFloat(style.paddingBottom) + parseFloat(style.paddingTop);
+    console.log(height);
+    height = 110;
+    ele.style.height = window.innerHeight - height + 'px';
     ele.style.width = window.innerWidth + 'px';
-    this.dataTableHeight = (window.innerHeight) / 2 - 80 + 'px';
+    this.dataTableHeight = (window.innerHeight) / 2 - height + 'px';
     console.log(this.dataTableHeight);
     console.log(this.dt.scrollHeight);
-    
+
     this.cdr.detectChanges();
   }
   checkExistFolder() {
@@ -191,7 +196,7 @@ export class AppComponent implements AfterViewInit {
   }
   push() {
     this.gitServ.push(this.currentWorkingDir).then(data => {
-      console.log(data);
+      this.refresh();
     })
   }
   refresh() {

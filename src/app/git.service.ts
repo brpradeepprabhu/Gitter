@@ -62,6 +62,7 @@ export class GitService {
       .catch(this.handleError);
   };
   push(currentWorkingDir: string): Promise<any> {
+    console.log("p", currentWorkingDir);
     return this.http.post(environment.serverurl + 'push ', { folder: currentWorkingDir }).toPromise()
       .then((data: any) => { return (data._body); })
       .catch(this.handleError);
