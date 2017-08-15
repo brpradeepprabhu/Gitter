@@ -73,7 +73,6 @@ export class AppComponent implements AfterViewInit {
   }
   commitClicked() {
     this.gitServ.commit(this.commitMsg, this.currentWorkingDir).then((data: any) => {
-      console.log(data);
       this.commitDialog = false;
       if (data !== 'error') {
         console.log(data);
@@ -100,7 +99,12 @@ export class AppComponent implements AfterViewInit {
         const branchArray = data.split('\n');
         for (let i = 0; i < branchArray.length; i++) {
           if (branchArray[i].trim() !== '') {
-            this.branches[0].items.push({ label: branchArray[i] });
+            const splitBranch = branchArray[i].split(' ');
+
+            const fontClass = (splitBranch[0] === '*') ? 'boldClass' : '';
+            console.log(splitBranch);
+            const branchText = branchArray[i].replace('*', '');
+            this.branches[0].items.push({ label: branchText, styleClass: fontClass });
           }
         }
       } else {

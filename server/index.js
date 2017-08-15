@@ -267,7 +267,38 @@ app.post('/untracked', function (req, res, next) {
 app.post('/folderCheck', function (req, res, next) {
   res.setHeader('Content-Type', 'application/json');
   let clonePath = req.body.folder;
+  console.log(clonePath)
   let commands = 'git rev-parse --is-inside-work-tree';
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.send((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+  });
+
+});
+app.post('/pushCount', function (req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
+  let clonePath = req.body.folder;
+  let currentBranch = req.body.currentBranch;
+  currentBranch = (currentBranch) ? currentBranch : 'master';
+  let commands = 'git rev-list --count ' + currentBranch;
+  console.log(clonePath);
   let outdata = "";
   let options = {
     cwd: clonePath,

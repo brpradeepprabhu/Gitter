@@ -100,6 +100,10 @@ body {
 .commitText {
   width: 400px;
   height: 100px;
-  color:black;
+  color: black;
+}
 
+.boldClass>a {
+  font-weight: bold;
+  background: rebeccapurple
 }
