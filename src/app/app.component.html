@@ -31,7 +31,7 @@
         <li>
           <a>
             <div><i class="fa fa-toggle-down fa-2x"></i></div>
-            <div>Pull <span>{{pulCount}}</span></div>
+            <div>Pull <span>{{pullCount}}</span></div>
           </a>
         </li>
         <li (click)="commitBtnClick();">
@@ -74,7 +74,7 @@
           <button pButton label="UnStage All" style="float:right;" (click)="unStageAllClicked()"></button>
         </div>
         <div class="ui-grid-col-12 overflowScroll" style="height:80%;">
-          <div class="col-xs-12 filesList" *ngFor="let files of trackedList" (click)="getDiffFile(files.fileName)">
+          <div class="col-xs-12 filesList" *ngFor="let files of trackedList" (click)="getDiffFile(files.fileName,true)">
             <div class="col-xs-1">{{files.status}}</div>
             <div class=" col-xs-11"><span style="cursor: pointer;">{{files.fileName}} </span></div>
           </div>
@@ -86,7 +86,7 @@
           <button pButton label="Stage All" style="float:right;" (click)="stageAllClicked()"></button>
         </div>
         <div class="ui-grid-col-12 overflowScroll" style="height:80%;">
-          <div class="col-xs-12 filesList" *ngFor="let files of untrackedList" (click)="getDiffFile(files.fileName)">
+          <div class="col-xs-12 filesList" *ngFor="let files of untrackedList" (click)="getDiffFile(files.fileName,false)">
             <div class="col-xs-1">{{files.status}}</div>
             <div class=" col-xs-11"><span style="cursor: pointer;">{{files.fileName}} </span></div>
           </div>

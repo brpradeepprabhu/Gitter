@@ -37,7 +37,7 @@ export class GitService {
   getTags(currentWorkingDir): Promise<any> {
     return this.http.post(environment.serverurl + 'getTags ', { folder: currentWorkingDir }).toPromise()
       .then((data: any) => { return this.parseData(data._body); })
-      .catch(this.handleError);
+      .catch(this.handleError)
 
   }
   getBranches(currentWorkingDir): Promise<any> {
@@ -46,8 +46,8 @@ export class GitService {
       .catch(this.handleError);
 
   }
-  getDiffFile(fileName, currentWorkingDir): Promise<any> {
-    return this.http.post(environment.serverurl + 'getDiffFile ', { fileName: fileName, folder: currentWorkingDir }).toPromise()
+  getDiffFile(fileName, currentWorkingDir, staged: boolean): Promise<any> {
+    return this.http.post(environment.serverurl + 'getDiffFile ', { fileName: fileName, folder: currentWorkingDir, staged: staged }).toPromise()
       .then((data: any) => { return this.parseData(data._body); })
       .catch(this.handleError);
 
@@ -59,7 +59,6 @@ export class GitService {
 
   }
   getPushCount(branch: string, orginBranch: string, folderPath: string): Promise<any> {
-    console.log(branch, folderPath)
     return this.http.post(environment.serverurl + 'getPushCount', {
       folder: folderPath, branch: branch,
       orginBranch: orginBranch
@@ -68,7 +67,6 @@ export class GitService {
       .catch(this.handleError);
   };
   push(currentWorkingDir: string): Promise<any> {
-    console.log("p", currentWorkingDir);
     return this.http.post(environment.serverurl + 'push ', { folder: currentWorkingDir }).toPromise()
       .then((data: any) => { return (data._body); })
       .catch(this.handleError);

@@ -148,7 +148,8 @@ app.post('/getDiffFile', function (req, res, next) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
   let fileName = req.body.fileName;
-  let commands = 'git diff --cached ' + fileName;
+  let staged = req.body.staged;
+  let commands = (staged) ? 'git diff --cached ' + fileName : 'git diff ' + fileName;
   let outdata = "";
   let options = {
     cwd: clonePath,

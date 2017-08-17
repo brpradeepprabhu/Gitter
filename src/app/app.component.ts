@@ -16,7 +16,7 @@ export class AppComponent implements AfterViewInit {
   untrackedList = [];
   trackedList = [];
   existingFolder: string;
-  dataTableHeight: string = "200px";
+  dataTableHeight = '200px';
   tags = [];
   commitDialog = false;
   commitMsg: string;
@@ -26,7 +26,7 @@ export class AppComponent implements AfterViewInit {
   currentBranchOrgin;
   pushCount = 0;
   pullCount = 0;
-  fileDiffText = "";
+  fileDiffText = '';
   @ViewChild(DataTable) dt: DataTable;
   constructor(private http: Http, private gitServ: GitService, private cdr: ChangeDetectorRef) {
 
@@ -40,17 +40,13 @@ export class AppComponent implements AfterViewInit {
 
   resizeWindow() {
     const ele: any = document.getElementsByClassName('contentArea')[0];
-    const headerNav = document.getElementsByClassName("headerContent")[0];
-    var style = window.getComputedStyle(headerNav);
+    const headerNav = document.getElementsByClassName('headerContent')[0];
+    const style = window.getComputedStyle(headerNav);
     let height: any = parseFloat(style.height) + parseFloat(style.paddingBottom) + parseFloat(style.paddingTop);
-    console.log(height);
     height = 110;
     ele.style.height = window.innerHeight - height + 'px';
     ele.style.width = window.innerWidth + 'px';
     this.dataTableHeight = (window.innerHeight) / 2 - height + 'px';
-    console.log(this.dataTableHeight);
-    console.log(this.dt.scrollHeight);
-
     this.cdr.detectChanges();
   }
   checkExistFolder() {
@@ -90,7 +86,6 @@ export class AppComponent implements AfterViewInit {
     this.gitServ.commit(this.commitMsg, this.currentWorkingDir).then((data: any) => {
       this.commitDialog = false;
       if (data !== 'error') {
-        console.log(data);
         this.refresh();
       } else {
         this.displayAlert();
@@ -135,28 +130,29 @@ export class AppComponent implements AfterViewInit {
   getCurrentBranchOrgin() {
     this.gitServ.getCurrentBranchOrgin(this.currentWorkingDir).then((data: any) => {
       this.currentBranchOrgin = data;
-      console.log(data);
       this.getPushCount();
     });
   }
-  getDiffFile(fileName) {
-    console.log(fileName);
-    this.gitServ.getDiffFile(fileName, this.currentWorkingDir).then((data: any) => {
+  getDiffFile(fileName, staged: boolean = false) {
+    this.gitServ.getDiffFile(fileName, this.currentWorkingDir, staged).then((data: any) => {
       this.fileDiffText = data;
-      console.log(this.fileDiffText);
-      var diff2htmlUi = new Diff2HtmlUI({
-        diff: this.fileDiffText
-      });
-      var container = '#codeContainer';
-      this.removeCodeContainer();
-      diff2htmlUi.fileListCloseable(container, !1), diff2htmlUi.highlightCode(container)
-      diff2htmlUi.draw(container, {
-        matching: 'lines'
-      });
+      console.log("diff", data)
+      if (data) {
+        const diff2htmlUi = new Diff2HtmlUI({
+          diff: this.fileDiffText
+        });
+        const container = '#codeContainer';
+        this.removeCodeContainer();
+        diff2htmlUi.fileListCloseable(container, !1);
+        diff2htmlUi.highlightCode(container);
+        diff2htmlUi.draw(container, {
+          matching: 'lines'
+        });
+      }
     });
   }
   removeCodeContainer() {
-    var node = document.getElementById("codeContainer");
+    var node = document.getElementById('codeContainer');
     while (node.firstChild) {
       node.removeChild(node.firstChild);
     }
@@ -165,7 +161,6 @@ export class AppComponent implements AfterViewInit {
     if (this.currentBranchOrgin) {
       this.gitServ.getPushCount(this.currentBranch, this.currentBranchOrgin, this.currentWorkingDir).then((data: any) => {
         let pushPullArray = data.split('	');
-        console.log(pushPullArray);
         this.pushCount = pushPullArray[0];
         this.pullCount = pushPullArray[1];
       });
@@ -280,12 +275,6 @@ export class AppComponent implements AfterViewInit {
 
         for (let i = 0; i < filesList.length; i++) {
           const fileNames = filesList[i].split(' ');
-          // for (let m = 0; m < fileNames.length; m++) {
-          //   if (fileNames[m].trim() == '') {
-          //     fileNames.splice(m, 1);
-          //   }
-          // }
-          console.log(fileNames);
           if (fileNames.length > 0) {
             if ((fileNames[0] === 'MM') || (fileNames[0] === '??')) {
               this.untrackedList.push({ status: fileNames[0], fileName: fileNames[1] });
