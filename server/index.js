@@ -117,6 +117,35 @@ app.post('/getBranches', function (req, res, next) {
     }
   });
 });
+app.post('/getDiffFile', function (req, res, next) {
+  res.setHeader('Content-Type', 'text/plain');
+  let clonePath = req.body.folder;
+  let fileName = req.body.fileName;
+  let commands = 'git diff --cached ' + fileName;
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.json((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+
+  });
+});
 app.post('/getPushCount', function (req, res, next) {
   res.setHeader('Content-Type', 'application/text');
   let clonePath = req.body.folder;

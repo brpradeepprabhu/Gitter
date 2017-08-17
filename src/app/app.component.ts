@@ -3,6 +3,7 @@ import { environment } from '../environments/environment';
 import { Http } from '@angular/http';
 import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { GitService } from './git.service';
+declare var Diff2HtmlUI;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,11 +21,12 @@ export class AppComponent implements AfterViewInit {
   commitDialog = false;
   commitMsg: string;
   branches = [];
-  currentWorkingDir = 'G:/Gitter';
+  currentWorkingDir = 'D:/Gitter';
   currentBranch;
   currentBranchOrgin;
   pushCount = 0;
   pullCount = 0;
+  fileDiffText = "";
   @ViewChild(DataTable) dt: DataTable;
   constructor(private http: Http, private gitServ: GitService, private cdr: ChangeDetectorRef) {
 
@@ -137,6 +139,25 @@ export class AppComponent implements AfterViewInit {
       this.getPushCount();
     });
   }
+  getDiffFile(fileName) {
+    console.log(fileName);
+    this.gitServ.getDiffFile(fileName, this.currentWorkingDir).then((data: any) => {
+      this.fileDiffText = data;
+      console.log(this.fileDiffText);
+      var diff2htmlUi = new Diff2HtmlUI({
+        diff: this.fileDiffText
+      });
+      var container = '#codeContainer';
+      var node = document.getElementById("codeContainer");
+      while (node.firstChild) {
+        node.removeChild(node.firstChild);
+      }
+      diff2htmlUi.fileListCloseable(container, !1), diff2htmlUi.highlightCode(container)
+      diff2htmlUi.draw(container, {
+        matching: 'lines'
+      });
+    });
+  }
   getPushCount() {
     if (this.currentBranchOrgin) {
       this.gitServ.getPushCount(this.currentBranch, this.currentBranchOrgin, this.currentWorkingDir).then((data: any) => {
@@ -229,7 +250,7 @@ export class AppComponent implements AfterViewInit {
             }
           }
           if (fileNames.length > 0) {
-            this.trackedList.push(fileNames[1]);
+            this.trackedList.push({ status: fileNames[0], fileName: fileNames[1] });
 
           }
         }
@@ -263,10 +284,10 @@ export class AppComponent implements AfterViewInit {
           console.log(fileNames);
           if (fileNames.length > 0) {
             if ((fileNames[0] === 'MM') || (fileNames[0] === '??')) {
-              this.untrackedList.push(fileNames[1]);
+              this.untrackedList.push({ status: fileNames[0], fileName: fileNames[1] });
             }
             if ((fileNames[1] === 'M') || ((fileNames[1] === 'D'))) {
-              this.untrackedList.push(fileNames[2]);
+              this.untrackedList.push({ status: fileNames[1], fileName: fileNames[2] });
             }
           }
         }

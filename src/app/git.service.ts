@@ -46,6 +46,12 @@ export class GitService {
       .catch(this.handleError);
 
   }
+  getDiffFile(fileName, currentWorkingDir): Promise<any> {
+    return this.http.post(environment.serverurl + 'getDiffFile ', { fileName: fileName, folder: currentWorkingDir }).toPromise()
+      .then((data: any) => { return this.parseData(data._body); })
+      .catch(this.handleError);
+
+  }
   getCurrentBranchOrgin(currentWorkingDir: string): Promise<any> {
     return this.http.post(environment.serverurl + 'getCurrentBranchOrgin ', { folder: currentWorkingDir }).toPromise()
       .then((data: any) => { return (data._body); })
