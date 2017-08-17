@@ -148,15 +148,18 @@ export class AppComponent implements AfterViewInit {
         diff: this.fileDiffText
       });
       var container = '#codeContainer';
-      var node = document.getElementById("codeContainer");
-      while (node.firstChild) {
-        node.removeChild(node.firstChild);
-      }
+      this.removeCodeContainer();
       diff2htmlUi.fileListCloseable(container, !1), diff2htmlUi.highlightCode(container)
       diff2htmlUi.draw(container, {
         matching: 'lines'
       });
     });
+  }
+  removeCodeContainer() {
+    var node = document.getElementById("codeContainer");
+    while (node.firstChild) {
+      node.removeChild(node.firstChild);
+    }
   }
   getPushCount() {
     if (this.currentBranchOrgin) {
@@ -226,6 +229,7 @@ export class AppComponent implements AfterViewInit {
     this.trackedFiles();
     this.getTags();
     this.getBranches();
+    this.removeCodeContainer();
 
   }
   stageAllClicked() {

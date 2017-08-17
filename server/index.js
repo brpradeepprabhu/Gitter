@@ -62,6 +62,33 @@ app.post('/commit', function (req, res) {
   });;
 
 });
+app.post('/folderCheck', function (req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
+  let clonePath = req.body.folder;
+  let commands = 'git rev-parse --is-inside-work-tree';
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.send((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+  });
+
+});
 app.post('/getTags', function (req, res, next) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
@@ -374,33 +401,7 @@ app.post('/untracked', function (req, res, next) {
     }
   });
 })
-app.post('/folderCheck', function (req, res, next) {
-  res.setHeader('Content-Type', 'application/json');
-  let clonePath = req.body.folder;
-  let commands = 'git rev-parse --is-inside-work-tree';
-  let outdata = "";
-  let options = {
-    cwd: clonePath,
-    onData: (data) => {
-      outdata += data;
-    },
-    onError: (err) => {
-      outdata = "error";
-    }
-  };
-  nrc.run(commands, options).then(function (exitCodes) {
-    if (exitCodes == 0) {
-      if (outdata !== "error") {
-        res.send((outdata));
-      } else {
-        res.send("error");
-      }
-    } else {
-      res.send("error");
-    }
-  });
 
-});
 
 var server = app.listen(8000, function () {
   console.log("server started");

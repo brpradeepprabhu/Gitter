@@ -86,7 +86,7 @@
           <button pButton label="Stage All" style="float:right;" (click)="stageAllClicked()"></button>
         </div>
         <div class="ui-grid-col-12 overflowScroll" style="height:80%;">
-          <div class="col-xs-12 filesList" *ngFor="let files of untrackedList">
+          <div class="col-xs-12 filesList" *ngFor="let files of untrackedList" (click)="getDiffFile(files.fileName)">
             <div class="col-xs-1">{{files.status}}</div>
             <div class=" col-xs-11"><span style="cursor: pointer;">{{files.fileName}} </span></div>
           </div>

@@ -111,6 +111,11 @@ body {
 #codeContainer {
   color: orange;
 }
-.d2h-code-linenumber{
+
+.d2h-code-linenumber {
   position: relative;
+}
+
+.d2h-del {
+  background: #841616;
 }
