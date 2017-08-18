@@ -116,12 +116,10 @@ export class AppComponent implements AfterViewInit {
               this.currentBranch = splitBranch[1];
             }
             const branchText = branchArray[i].replace('*', '');
-
             this.branches[0].items.push({
               label: branchText, styleClass: fontClass, command: (event) => {
-                console.log(event.item.label)
                 this.gitServ.checkout(event.item.label, this.currentWorkingDir).then((data) => {
-                  console.log(data)
+
                   this.refresh();
                 })
               }
