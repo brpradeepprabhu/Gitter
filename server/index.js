@@ -62,6 +62,34 @@ app.post('/commit', function (req, res) {
   });;
 
 });
+app.post('/checkout', function (req, res) {
+  let clonePath = req.body.folder;
+  let branch = req.body.branch;
+  let force = req.body.force;
+  console.log(branch);
+  var commands =
+    'git checkout ' + branch;
+  let outdata = "";
+  var options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = err;
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes != 0) {
+      res.send(outdata);
+    } else {
+      res.send("success");
+    }
+  }, function (err) {
+    res.send(err);
+  });;
+
+});
 app.post('/folderCheck', function (req, res, next) {
   res.setHeader('Content-Type', 'application/json');
   let clonePath = req.body.folder;

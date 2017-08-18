@@ -23,6 +23,11 @@ export class GitService {
       .then((data) => { return data; })
       .catch(this.handleError);
   }
+  checkout(branch: string, folderPath: string): Promise<any> {
+    return this.http.post(environment.serverurl + 'checkout', { branch: branch, folder: folderPath }).toPromise()
+      .then((data) => { return data; })
+      .catch(this.handleError);
+  }
   checkExistFolder(existingFolder: string): Promise<any> {
     return this.http.post(environment.serverurl + 'folderCheck', { folder: existingFolder }).toPromise()
       .then((data: any) => { return data._body; })

@@ -117,7 +117,15 @@ export class AppComponent implements AfterViewInit {
             }
             const branchText = branchArray[i].replace('*', '');
 
-            this.branches[0].items.push({ label: branchText, styleClass: fontClass });
+            this.branches[0].items.push({
+              label: branchText, styleClass: fontClass, command: (event) => {
+                console.log(event.item.label)
+                this.gitServ.checkout(event.item.label, this.currentWorkingDir).then((data) => {
+                  console.log(data)
+                  this.refresh();
+                })
+              }
+            });
 
           }
         }
@@ -136,7 +144,6 @@ export class AppComponent implements AfterViewInit {
   getDiffFile(fileName, staged: boolean = false) {
     this.gitServ.getDiffFile(fileName, this.currentWorkingDir, staged).then((data: any) => {
       this.fileDiffText = data;
-      console.log("diff", data)
       if (data) {
         const diff2htmlUi = new Diff2HtmlUI({
           diff: this.fileDiffText
@@ -152,7 +159,7 @@ export class AppComponent implements AfterViewInit {
     });
   }
   removeCodeContainer() {
-    var node = document.getElementById('codeContainer');
+    const node = document.getElementById('codeContainer');
     while (node.firstChild) {
       node.removeChild(node.firstChild);
     }
@@ -160,7 +167,7 @@ export class AppComponent implements AfterViewInit {
   getPushCount() {
     if (this.currentBranchOrgin) {
       this.gitServ.getPushCount(this.currentBranch, this.currentBranchOrgin, this.currentWorkingDir).then((data: any) => {
-        let pushPullArray = data.split('	');
+        const pushPullArray = data.split('	');
         this.pushCount = pushPullArray[0];
         this.pullCount = pushPullArray[1];
       });
@@ -216,7 +223,7 @@ export class AppComponent implements AfterViewInit {
   push() {
     this.gitServ.push(this.currentWorkingDir).then(data => {
       this.refresh();
-    })
+    });
   }
   refresh() {
     this.logs();
