@@ -148,12 +148,14 @@ export class RowExpansionLoader implements OnInit, OnDestroy {
                 <i class="fa fa-filter"></i>
                 </span>
                
-                <div *ngIf="col.filterVisibile" class="filterClass" [style.left.px]="col.filterLeft" [style.top.px]="col.filterTop">                 
+                <div *ngIf="col.filterVisibile" class="filterClass" [style.left.px]="col.filterLeft" [style.top.px]="col.filterTop" (click)="filterBgClick($event)">                 
                 <div *ngIf="!col.filterTemplate">  
                 <div style="width:100%"><span class="filterclose" (click)='filterClose(col)'><i class="fa fa-close"></i></span></div>
                   <div style="padding:10px">Show items with value that 
                     <div *ngIf="col.columnType!='values'&&col.columnType!='date'">
-                        <p-dropdown [style]="{'width':'100% !important'}" [options]="filterMatchMode" [(ngModel)]="col.filterMatchMode" styleClass="ui-column-filter ui-inputtext ui-widget ui-state-default ui-corner-all" ></p-dropdown>
+                        <select style="width:100% !important"   [(ngModel)]="col.filterMatchMode"  class="ui-column-filter ui-inputtext ui-widget ui-state-default ui-corner-all" >
+                            <option *ngFor='let opt of filterMatchMode'  [selected]="opt.value == col.filterMatchMode" [ngValue]="opt.value">{{opt.label}}</option>
+                        </select>
                         <input [attr.type]="col.filterType" class="ui-column-filter ui-inputtext ui-widget ui-state-default ui-corner-all" [attr.maxlength]="col.filterMaxlength" [attr.placeholder]="col.filterPlaceholder"  [(ngModel)]="col.filterValue" (click)="dt.onFilterInputClick($event)" style="margin-top:15px" *ngIf='col.columnType!=="boolean"'/>
 
                         <input [attr.type]="col.filterType" class="ui-column-filter ui-inputtext ui-widget ui-state-default ui-corner-all" [attr.maxlength]="col.filterMaxlength" [attr.placeholder]="col.filterPlaceholder"  [(ngModel)]="col.filterValue1" (click)="dt.onFilterInputClick($event)" style="margin-top:15px" *ngIf='col.filterMatchMode=="inbetween"'/>
@@ -194,6 +196,13 @@ export class ColumnHeaders {
   filterClose(col) {
     col.filterVisibile = false;
   }
+  filterdrowDownClick(e) {
+    console.log(e);
+  }
+  filterBgClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
   filterClick(e, col) {
 
     if (col.columnType.trim().toLowerCase() === 'number') {
@@ -215,9 +224,10 @@ export class ColumnHeaders {
       let tableAllValue = this.dt.value;
       for (let j = 0; j < tableAllValue.length; j++) {
         let tableValue = tableAllValue[j];
-        if ((tableValue[col.field] !== undefined) && (tableValue[col.field] !== null) && (tableValue[col.field] !== "")) {
-          if (values.indexOf(tableValue[col.field]) == -1) {
-            values.push(tableValue[col.field])
+        let resoloveValue = this.dt.resolveFieldData(tableValue, col.field);
+        if ((resoloveValue !== undefined) && (resoloveValue !== null) && (resoloveValue !== "")) {
+          if (values.indexOf(resoloveValue) == -1) {
+            values.push(resoloveValue)
           }
         }
       }
@@ -244,6 +254,7 @@ export class ColumnHeaders {
       this.columns[i].filterVisibile = false;
     }
     col.filterVisibile = !col.filterVisibile;
+    col.filterMatchMode = (!col.filterMatchMode) ? "startsWith" : col.filterMatchMode;
     e.stopPropagation();
   }
   /**

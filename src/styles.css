@@ -1,5 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
 
+.ui-filter-column {
+  float: right;
+}
+
+.filterClass {
+  z-index: 10000;
+  position: absolute;
+  z-index: 10000;
+  position: fixed;
+  background: white;
+  width: 250px;
+  color: black;
+  font-weight: bold;
+  text-align: left;
+}
+
+.filterclose {
+  float: right;
+  margin-right: 10px;
+}
+
+.filterBtnGrp {
+  background: orange;
+  float: right;
+  width: 100%;
+  padding: 5px;
+  font-weight: bold;
+}
+.filterBtnGrp> button{
+  float: right;
+  margin: 5px;
+}
 body {
   background: #1C1E23;
 }
@@ -129,11 +161,8 @@ body {
   display: none;
 }
 
-
-
 @media (min-width:768px) {
   .refreshBtn {
     float: right !important;
   }
-
 }

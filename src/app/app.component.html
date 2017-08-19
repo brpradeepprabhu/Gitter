@@ -1,6 +1,5 @@
 <nav class="navbar navbar-default headerContent">
   <div class="container-fluid headerClass">
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
@@ -10,8 +9,6 @@
       </button>
       <a class="navbar-brand" href="#">Gitter</a>
     </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="menu" style="width:93%;float:left;padding:0">
       <ul class="nav navbar-nav navbar-center col-xs-12">
         <li (click)="cloneClick()">
@@ -73,10 +70,10 @@
   <div class='ui-grid-col-10 height100'>
     <div class="ui-grid-col-12 height50 borderBottom" style="margin-top:3px">
       <app-grid [value]="logData" scrollable="true" [scrollHeight]="dataTableHeight">
-        <app-column field="commit" header="Description" [style]="{'width':'60%'}" styleClass="truncate"></app-column>
+        <app-column field="commit" [filter]="true"  [sortable]="true" header="Description" [style]="{'width':'60%'}" styleClass="truncate"></app-column>
         <app-column field="date" header="Date" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
-        <app-column field="name" header="Name" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
-        <app-column field="hash" header="Hash" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
+        <app-column field="name" header="Name" [sortable]="true" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
+        <app-column field="hash.value" header="Hash" [filter]="true" columnType="values" [sortable]="true" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
       </app-grid>
     </div>
     <div class="ui-grid-col-6 height50 borderRight" id="untrackedfiles">

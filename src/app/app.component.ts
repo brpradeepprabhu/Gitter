@@ -121,7 +121,6 @@ export class AppComponent implements AfterViewInit {
             this.branches[0].items.push({
               label: branchText, styleClass: fontClass, command: (event) => {
                 this.gitServ.checkout(event.item.label, this.currentWorkingDir).then((data) => {
-
                   this.refresh();
                 })
               }
@@ -204,12 +203,12 @@ export class AppComponent implements AfterViewInit {
         for (let i = 0; i < logFullArray.length; i++) {
           const values = logFullArray[i].split('		');
           const data = {
-            hash: values[0],
+            hash: { value: values[0] },
             name: values[1],
             date: new Date(values[2]).toLocaleString(),
             commit: values[3]
           };
-          if (data.hash !== '') {
+          if (data.hash.value !== '') {
             this.logData.push(data);
           }
 
@@ -239,7 +238,9 @@ export class AppComponent implements AfterViewInit {
     this.gitServ.stageAll(this.currentWorkingDir).then((data: any) => {
       if (data !== 'error') {
         this.refresh();
+        this.growlMsg = [];
         this.growlMsg.push({ severity: 'success', summary: 'Stage All Files  Successfully' });
+        //  this.growlMsg.push({ severity: 'success', summary: 'Success Message', detail: 'Order submitted' });
       } else {
         this.displayAlert();
       }
@@ -271,6 +272,8 @@ export class AppComponent implements AfterViewInit {
     this.gitServ.unStageAll(this.currentWorkingDir).then((data: any) => {
       if (data !== 'error') {
         this.refresh();
+        this.growlMsg = [];
+        //  this.growlMsg.push({ severity: 'success', summary: 'Success Message', detail: 'Order submitted' });
         this.growlMsg.push({ severity: 'success', summary: 'UnStage All Files  Successfully', sticky: false, life: 1000 });
       } else {
         this.displayAlert();
