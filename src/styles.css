@@ -4,14 +4,18 @@
   float: right;
 }
 
+.ui-state-highlight {
+  background: #ffe000;
+  color: #1c2320;
+}
+
 .filterClass {
   z-index: 10000;
   position: absolute;
-  z-index: 10000;
   position: fixed;
-  background: white;
+  background: #272A31;
   width: 250px;
-  color: black;
+  color: white;
   font-weight: bold;
   text-align: left;
 }
@@ -22,16 +26,18 @@
 }
 
 .filterBtnGrp {
-  background: orange;
+  background: #909297;
   float: right;
   width: 100%;
   padding: 5px;
   font-weight: bold;
 }
-.filterBtnGrp> button{
+
+.filterBtnGrp>button {
   float: right;
   margin: 5px;
 }
+
 body {
   background: #1C1E23;
 }
@@ -95,11 +101,12 @@ body {
 .filesList {
   border-bottom: 1px solid #313641;
   padding: 5px 15px;
+  cursor: pointer;
 }
 
 .filesList:hover {
-  background: #f58400;
-  color: white;
+  background: #ffe000;
+  color: black;
 }
 
 .truncate {
@@ -113,12 +120,12 @@ body {
 }
 
 .navbar-nav>li:hover {
-  background: orange;
+  background: #f58400;
   color: white;
 }
 
 .backgroundColor {
-  background: orange;
+  background: #f58400;
   color: black;
 }
 
@@ -140,7 +147,7 @@ body {
 }
 
 #codeContainer {
-  color: orange;
+  color: #f58400;
   position: relative;
 }
 

@@ -170,8 +170,8 @@ export class RowExpansionLoader implements OnInit, OnDestroy {
                     </div>
                   </div>
                   <div class="filterBtnGrp">
-                  <button  type="button" label="Clear" class ="link-btn" (click)="filterBtn($event,col,'clear')">Clear</button>
-                  <button  type="button" label="Apply" class ="btn" (click)="filterBtn($event,col,'apply')">Apply</button>
+                  <button  type="button"  class ="btn" pButton label="Clear" (click)="filterBtn($event,col,'clear')"></button>
+                  <button  type="button"  class ="btn" pButton label="Apply" (click)="filterBtn($event,col,'apply')"></button>
                   </div>
                 </div>
                 <p-columnFilterTemplateLoader [column]="col" *ngIf="col.filterTemplate"></p-columnFilterTemplateLoader>
@@ -1359,25 +1359,37 @@ export class AppGridComponent implements AfterViewChecked, AfterViewInit, AfterC
         if (this.sortOrder === 0) {
 
         } else {
+
           if (!this.groupField) {
-            this.value.sort((data1, data2) => {
-              let value1 = this.resolveFieldData(data1, this.sortField);
-              let value2 = this.resolveFieldData(data2, this.sortField);
-              let result = null;
+            let sortValue = false;
+            let checkValue = this.resolveFieldData(this.value[0], this.sortField);
+            for (let i = 1; i < this.value.length; i++) {
+              let value1 = this.resolveFieldData(this.value[i], this.sortField);
+              if (checkValue !== value1) {
+                sortValue = true;
+                break;
+              }
+            }
+            if (sortValue === true) {
+              this.value.sort((data1, data2) => {
+                let value1 = this.resolveFieldData(data1, this.sortField);
+                let value2 = this.resolveFieldData(data2, this.sortField);
+                let result = null;
 
-              if (value1 == null && value2 != null)
-                result = -1;
-              else if (value1 != null && value2 == null)
-                result = 1;
-              else if (value1 == null && value2 == null)
-                result = 0;
-              else if (typeof value1 === 'string' && typeof value2 === 'string')
-                result = value1.localeCompare(value2);
-              else
-                result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
+                if (value1 == null && value2 != null)
+                  result = -1;
+                else if (value1 != null && value2 == null)
+                  result = 1;
+                else if (value1 == null && value2 == null)
+                  result = 0;
+                else if (typeof value1 === 'string' && typeof value2 === 'string')
+                  result = value1.localeCompare(value2);
+                else
+                  result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
 
-              return (this.sortOrder * result);
-            });
+                return (this.sortOrder * result);
+              });
+            }
 
           } else {
 

@@ -27,6 +27,7 @@ export class AppComponent implements AfterViewInit {
   currentBranchOrgin;
   pushCount = 0;
   pullCount = 0;
+  selectedCommit;
   fileDiffText = '';
   growlMsg = [];
   @ViewChild(AppGridComponent) dt: DataTable;
@@ -83,6 +84,10 @@ export class AppComponent implements AfterViewInit {
   }
   commitBtnClick() {
     this.commitDialog = true;
+  }
+  commitSelected(e) {
+    const hash = e.data.hash;
+    console.log(hash)
   }
   commitClicked() {
     this.gitServ.commit(this.commitMsg, this.currentWorkingDir).then((data: any) => {
@@ -205,12 +210,12 @@ export class AppComponent implements AfterViewInit {
         for (let i = 0; i < logFullArray.length; i++) {
           const values = logFullArray[i].split('		');
           const data = {
-            hash: { value: values[0] },
+            hash: values[0],
             name: values[1],
             date: new Date(values[2]).toLocaleString(),
             commit: values[3]
           };
-          if (data.hash.value !== '') {
+          if (data.hash !== '') {
             this.logData.push(data);
           }
 

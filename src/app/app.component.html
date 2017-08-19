@@ -69,11 +69,11 @@
   </div>
   <div class='ui-grid-col-10 height100'>
     <div class="ui-grid-col-12 height50 borderBottom" style="margin-top:3px">
-      <app-grid [value]="logData" scrollable="true" [scrollHeight]="dataTableHeight">
-        <app-column field="commit" [filter]="true"  [sortable]="true" header="Description" [style]="{'width':'60%'}" styleClass="truncate"></app-column>
+      <app-grid [value]="logData" scrollable="true" [scrollHeight]="dataTableHeight" selectionMode="single" [(selection)]="selectedCommit" (onRowSelect)="commitSelected($event)">
+        <app-column field="commit" [filter]="true" [sortable]="true" header="Description" [style]="{'width':'60%'}" styleClass="truncate"></app-column>
         <app-column field="date" header="Date" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
         <app-column field="name" header="Name" [sortable]="true" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
-        <app-column field="hash.value" header="Hash" [filter]="true" columnType="values" [sortable]="true" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
+        <app-column field="hash" header="Hash" [filter]="true" columnType="values" [sortable]="true" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
       </app-grid>
     </div>
     <div class="ui-grid-col-6 height50 borderRight" id="untrackedfiles">
