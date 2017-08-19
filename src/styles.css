@@ -105,8 +105,8 @@ body {
 }
 
 .filesList:hover {
-  background: #ffe000;
-  color: black;
+  background: #2e7db2;
+  color: white;
 }
 
 .truncate {
@@ -126,7 +126,7 @@ body {
 
 .backgroundColor {
   background: #f58400;
-  color: black;
+  color: white;
 }
 
 .fontBold {
@@ -141,11 +141,14 @@ body {
   color: black;
 }
 
-.boldClass>a {
+.boldClass>.ui-menuitem-link {
   font-weight: bold;
-  background: rebeccapurple
+  background: #ffe000;
+  color:black !important;
 }
-
+.boldClass>.ui-menuitem-link:hover {
+  color:white !important;
+}
 #codeContainer {
   color: #f58400;
   position: relative;
@@ -167,7 +170,16 @@ body {
 .d2h-file-header {
   display: none;
 }
-
+.commitSideBar{
+  position: absolute;
+  height: 100%;
+  float: right;
+  width:40%;
+  background: black;
+  border-left: 1px solid yellow;
+  top:0;
+  left: 60%;
+}
 @media (min-width:768px) {
   .refreshBtn {
     float: right !important;

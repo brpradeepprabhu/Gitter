@@ -46,7 +46,9 @@ export class AppComponent implements AfterViewInit {
     const headerNav = document.getElementsByClassName('headerContent')[0];
     const style = window.getComputedStyle(headerNav);
     let height: any = parseFloat(style.height) + parseFloat(style.paddingBottom) + parseFloat(style.paddingTop);
-    height = 110;
+    console.log(height, style.height)
+    height = 105;
+
     ele.style.height = window.innerHeight - height + 'px';
     ele.style.width = window.innerWidth + 'px';
     this.dataTableHeight = (window.innerHeight) / 2 - height + 'px';
@@ -86,8 +88,8 @@ export class AppComponent implements AfterViewInit {
     this.commitDialog = true;
   }
   commitSelected(e) {
-    const hash = e.data.hash;
-    console.log(hash)
+    const hash = e.data.hash.trim();
+
   }
   commitClicked() {
     this.gitServ.commit(this.commitMsg, this.currentWorkingDir).then((data: any) => {
