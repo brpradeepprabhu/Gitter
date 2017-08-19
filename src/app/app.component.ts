@@ -89,6 +89,8 @@ export class AppComponent implements AfterViewInit {
       this.commitDialog = false;
       if (data !== 'error') {
         this.refresh();
+        this.growlMsg = [];
+        this.growlMsg.push({ severity: 'success', summary: 'Commited  Successfully', sticky: false, life: 1000 });
       } else {
         this.displayAlert();
       }
