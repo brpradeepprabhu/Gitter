@@ -77,7 +77,6 @@ body {
 }
 
 .navbar-nav>li {
-  width: 20%;
   text-align: center;
 }
 
@@ -111,7 +110,6 @@ body {
 #codeContainer {
   color: orange;
   position: relative;
-
 }
 
 .d2h-code-linenumber {
@@ -121,11 +119,21 @@ body {
 .d2h-del {
   background: #841616;
 }
-.d2h-code-wrapper{
-position: absolute;
-width: 99%;
-  
+
+.d2h-code-wrapper {
+  position: absolute;
+  width: 99%;
 }
-.d2h-file-header{
+
+.d2h-file-header {
   display: none;
+}
+
+
+
+@media (min-width:768px) {
+  .refreshBtn {
+    float: right !important;
+  }
+
 }
