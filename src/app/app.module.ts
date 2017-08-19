@@ -1,9 +1,7 @@
-
-
-
+import { AppGridModule } from './appgrid/appgrid.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { DataTableModule, PanelMenuModule, MenuItem, DialogModule, ButtonModule, TabViewModule, InputTextModule } from 'primeng/primeng';
+import { DataTableModule, PanelMenuModule, MenuItem, DialogModule, ButtonModule, TabViewModule, InputTextModule, GrowlModule } from 'primeng/primeng';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -16,6 +14,7 @@ import { GitService } from './git.service';
     AppComponent
   ],
   imports: [
+    AppGridModule,
     BrowserAnimationsModule,
     BrowserModule,
     ButtonModule,
@@ -26,7 +25,7 @@ import { GitService } from './git.service';
     InputTextModule,
     TabViewModule,
     PanelMenuModule,
-
+    GrowlModule
 
   ],
   providers: [GitService],

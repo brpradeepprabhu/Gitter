@@ -72,12 +72,12 @@
   </div>
   <div class='ui-grid-col-10 height100'>
     <div class="ui-grid-col-12 height50 borderBottom" style="margin-top:3px">
-      <p-dataTable [value]="logData" scrollable="true" [scrollHeight]="dataTableHeight">
-        <p-column field="commit" header="Description" [style]="{'width':'60%'}" styleClass="truncate"></p-column>
-        <p-column field="date" header="Date" [style]="{'width':'13%'}" styleClass="truncate"></p-column>
-        <p-column field="name" header="Name" [style]="{'width':'13%'}" styleClass="truncate"></p-column>
-        <p-column field="hash" header="Hash" [style]="{'width':'13%'}" styleClass="truncate"></p-column>
-      </p-dataTable>
+      <app-grid [value]="logData" scrollable="true" [scrollHeight]="dataTableHeight">
+        <app-column field="commit" header="Description" [style]="{'width':'60%'}" styleClass="truncate"></app-column>
+        <app-column field="date" header="Date" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
+        <app-column field="name" header="Name" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
+        <app-column field="hash" header="Hash" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
+      </app-grid>
     </div>
     <div class="ui-grid-col-6 height50 borderRight" id="untrackedfiles">
       <div class="ui-grid-col-12 height50 borderBottom overflowScroll">
@@ -138,3 +138,4 @@
     <button pButton label="Cancel" (click)="commitDialog=false;"></button>
   </p-footer>
 </p-dialog>
+<p-growl [(value)]="growlMsg"></p-growl>

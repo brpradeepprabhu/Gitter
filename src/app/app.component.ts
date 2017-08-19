@@ -1,3 +1,4 @@
+import { AppGridComponent } from './appgrid/appgrid.component';
 import { DataTable } from 'primeng/primeng';
 import { environment } from '../environments/environment';
 import { Http } from '@angular/http';
@@ -27,7 +28,8 @@ export class AppComponent implements AfterViewInit {
   pushCount = 0;
   pullCount = 0;
   fileDiffText = '';
-  @ViewChild(DataTable) dt: DataTable;
+  growlMsg = [];
+  @ViewChild(AppGridComponent) dt: DataTable;
   constructor(private http: Http, private gitServ: GitService, private cdr: ChangeDetectorRef) {
 
   }
@@ -221,6 +223,7 @@ export class AppComponent implements AfterViewInit {
   push() {
     this.gitServ.push(this.currentWorkingDir).then(data => {
       this.refresh();
+      this.growlMsg.push({ severity: 'success', summary: 'Pushed Successfully' });
     });
   }
   refresh() {
@@ -236,6 +239,7 @@ export class AppComponent implements AfterViewInit {
     this.gitServ.stageAll(this.currentWorkingDir).then((data: any) => {
       if (data !== 'error') {
         this.refresh();
+        this.growlMsg.push({ severity: 'success', summary: 'Stage All Files  Successfully' });
       } else {
         this.displayAlert();
       }
@@ -267,6 +271,7 @@ export class AppComponent implements AfterViewInit {
     this.gitServ.unStageAll(this.currentWorkingDir).then((data: any) => {
       if (data !== 'error') {
         this.refresh();
+        this.growlMsg.push({ severity: 'success', summary: 'UnStage All Files  Successfully', sticky: false, life: 1000 });
       } else {
         this.displayAlert();
       }
