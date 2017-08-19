@@ -222,6 +222,7 @@ export class AppComponent implements AfterViewInit {
   push() {
     this.gitServ.push(this.currentWorkingDir).then(data => {
       this.refresh();
+      this.growlMsg = [];
       this.growlMsg.push({ severity: 'success', summary: 'Pushed Successfully' });
     });
   }
