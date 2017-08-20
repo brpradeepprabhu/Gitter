@@ -69,7 +69,8 @@
   </div>
   <div class='ui-grid-col-10 height100'>
     <div class="ui-grid-col-12 height50 borderBottom" style="margin-top:3px">
-      <app-grid [value]="logData" scrollable="true" [scrollHeight]="dataTableHeight" selectionMode="single" [(selection)]="selectedCommit" (onRowSelect)="commitSelected($event)">
+      <app-grid [value]="logData" scrollable="true" [scrollHeight]="dataTableHeight" selectionMode="single" [(selection)]="selectedCommit"
+        (onRowSelect)="commitSelected($event)">
         <app-column field="commit" [filter]="true" [sortable]="true" header="Description" [style]="{'width':'60%'}" styleClass="truncate"></app-column>
         <app-column field="date" header="Date" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
         <app-column field="name" header="Name" [sortable]="true" [style]="{'width':'13%'}" styleClass="truncate"></app-column>
@@ -136,9 +137,26 @@
   </p-footer>
 </p-dialog>
 <p-growl [(value)]="growlMsg"></p-growl>
-<div class="commitSideBar">
+<div class="commitSideBar" [@display]="commitSideShow">
   <div class="backgroundColor col-xs-12">
-     <h3 class="col-xs-10">Commit Id</h3>
-     <div class="pull-right" style="margin-top:20px"><span><i class="fa fa-close fa-2x"></i></span></div>
+    <h4 class="col-xs-10">{{commitPrevFiles.hash}}</h4>
+    <div class="pull-right" style="margin-top:5px" (click)="commitSideShow='hide'"><span><i class="fa fa-close fa-2x"></i></span></div>
+  </div>
+
+  <div class="commitFiles col-xs-12 " style="margin:10px 0;padding:10px">
+    <div class="col-xs-6"><b>Commited By  </b> </div>
+    <div class="col-xs-6">{{commitPrevFiles.commitBy}}</div>
+    <div class="col-xs-6"><b>Commited Date </b> </div>
+    <div class="col-xs-6">{{commitPrevFiles.commitDate}}</div>
+  </div>
+
+  <div>
+    <h5></h5>
+  </div>
+  <h4 style="padding: 10px;">Names</h4>
+  <div class="commitFiles" style="position:absolute;width:97%;height:80%;overflow:auto;">
+    <div *ngFor="let files of commitPrevFiles.filesList" class="filesList">
+      {{files}}
+    </div>
   </div>
 </div>

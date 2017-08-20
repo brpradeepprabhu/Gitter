@@ -4,11 +4,31 @@ import { environment } from '../environments/environment';
 import { Http } from '@angular/http';
 import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { GitService } from './git.service';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from '@angular/animations';
 declare var Diff2HtmlUI;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  animations: [
+    trigger('display', [
+      state('show', style({
+        right: 0
+      })),
+      state('hide', style({
+        right: '-30%'
+      })),
+      transition('show => hide', animate('200ms ease-in')),
+      transition('hide => show', animate('200ms ease-out'))
+    ])
+  ]
+
 })
 export class AppComponent implements AfterViewInit {
   title = 'app works!';
@@ -30,6 +50,8 @@ export class AppComponent implements AfterViewInit {
   selectedCommit;
   fileDiffText = '';
   growlMsg = [];
+  commitPrevFiles = { hash: '', filesList: [], commitBy: '', commitDate: '' };
+  commitSideShow = 'hide';
   @ViewChild(AppGridComponent) dt: DataTable;
   constructor(private http: Http, private gitServ: GitService, private cdr: ChangeDetectorRef) {
 
@@ -46,9 +68,7 @@ export class AppComponent implements AfterViewInit {
     const headerNav = document.getElementsByClassName('headerContent')[0];
     const style = window.getComputedStyle(headerNav);
     let height: any = parseFloat(style.height) + parseFloat(style.paddingBottom) + parseFloat(style.paddingTop);
-    console.log(height, style.height)
     height = 105;
-
     ele.style.height = window.innerHeight - height + 'px';
     ele.style.width = window.innerWidth + 'px';
     this.dataTableHeight = (window.innerHeight) / 2 - height + 'px';
@@ -89,7 +109,19 @@ export class AppComponent implements AfterViewInit {
   }
   commitSelected(e) {
     const hash = e.data.hash.trim();
-
+    console.log(e.data)
+    this.gitServ.getListOfFilesCommit(hash, this.currentWorkingDir).then((data: any) => {
+      this.commitDialog = false;
+      this.commitSideShow = 'show';
+      if (data !== 'error') {
+        this.commitPrevFiles.filesList = data.split('\n');
+        this.commitPrevFiles.hash = hash;
+        this.commitPrevFiles.commitBy = e.data.name;
+        this.commitPrevFiles.commitDate = e.data.date;
+      } else {
+        this.displayAlert();
+      }
+    });
   }
   commitClicked() {
     this.gitServ.commit(this.commitMsg, this.currentWorkingDir).then((data: any) => {
@@ -129,9 +161,9 @@ export class AppComponent implements AfterViewInit {
             const branchText = branchArray[i].replace('*', '');
             this.branches[0].items.push({
               label: branchText, styleClass: fontClass, command: (event) => {
-                this.gitServ.checkout(event.item.label, this.currentWorkingDir).then((data) => {
+                this.gitServ.checkout(event.item.label, this.currentWorkingDir).then(() => {
                   this.refresh();
-                })
+                });
               }
             });
 

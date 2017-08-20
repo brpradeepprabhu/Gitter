@@ -261,6 +261,34 @@ app.post('/getCurrentBranchOrgin', function (req, res, next) {
   });
 
 });
+app.post('/getListOfFilesCommit', function (req, res, next) {
+  res.setHeader('Content-Type', 'application/text');
+  let clonePath = req.body.folder;
+  let commitid = req.body.commitid;
+  let commands = 'git diff-tree --no-commit-id --name-only -r ' + commitid;
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.json((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+  });
+
+});
 app.post('/push', function (req, res, next) {
   res.setHeader('Content-Type', 'application/text');
   let clonePath = req.body.folder;

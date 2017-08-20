@@ -94,7 +94,8 @@ body {
   color: white;
 }
 
-#untrackedfiles {
+#untrackedfiles,
+.commitSideBar {
   color: #cccccc;
 }
 
@@ -144,11 +145,13 @@ body {
 .boldClass>.ui-menuitem-link {
   font-weight: bold;
   background: #ffe000;
-  color:black !important;
+  color: black !important;
 }
+
 .boldClass>.ui-menuitem-link:hover {
-  color:white !important;
+  color: white !important;
 }
+
 #codeContainer {
   color: #f58400;
   position: relative;
@@ -170,16 +173,29 @@ body {
 .d2h-file-header {
   display: none;
 }
-.commitSideBar{
-  position: absolute;
+
+.commitSideBar {
+  position: fixed;
   height: 100%;
   float: right;
-  width:40%;
+  width: 30%;
   background: black;
   border-left: 1px solid yellow;
-  top:0;
-  left: 60%;
+  top: 0;
+  right: 0;
+  overflow: auto;
 }
+
+.commitFiles {
+  background: #313641;
+  margin: 10px;
+  border-radius: 5px
+}
+
+.commitFiles>div {
+  border-bottom: 1px solid black;
+}
+
 @media (min-width:768px) {
   .refreshBtn {
     float: right !important;

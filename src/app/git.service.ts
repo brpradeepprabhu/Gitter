@@ -28,6 +28,11 @@ export class GitService {
       .then((data) => { return data; })
       .catch(this.handleError);
   }
+  getListOfFilesCommit(commitId: string, folderPath: string) {
+    return this.http.post(environment.serverurl + 'getListOfFilesCommit', { commitid: commitId, folder: folderPath }).toPromise()
+      .then((data: any) => { return this.parseData(data._body); })
+      .catch(this.handleError);
+  }
   checkExistFolder(existingFolder: string): Promise<any> {
     return this.http.post(environment.serverurl + 'folderCheck', { folder: existingFolder }).toPromise()
       .then((data: any) => { return data._body; })
