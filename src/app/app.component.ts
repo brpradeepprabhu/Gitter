@@ -115,6 +115,11 @@ export class AppComponent implements AfterViewInit {
       this.commitSideShow = 'show';
       if (data !== 'error') {
         this.commitPrevFiles.filesList = data.split('\n');
+        for (let i = 0; i < this.commitPrevFiles.filesList.length; i++) {
+          if (this.commitPrevFiles.filesList[i].trim() === '') {
+            this.commitPrevFiles.filesList.splice(i, 1);
+          }
+        }
         this.commitPrevFiles.hash = hash;
         this.commitPrevFiles.commitBy = e.data.name;
         this.commitPrevFiles.commitDate = e.data.date;
