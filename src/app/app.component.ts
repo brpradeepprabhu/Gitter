@@ -234,7 +234,7 @@ export class AppComponent implements AfterViewInit {
   getCurrentBranchOrgin() {
     this.gitServ.getCurrentBranchOrgin(this.currentWorkingDir).then((data: any) => {
       this.currentBranchOrgin = data;
-      this.getPushCount();
+      this.getPushCount();  
     });
   }
   getDiffFile(fileName, staged: boolean = false) {
