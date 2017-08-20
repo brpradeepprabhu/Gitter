@@ -90,7 +90,6 @@ app.post('/checkout', function (req, res) {
   let clonePath = req.body.folder;
   let branch = req.body.branch;
   let force = req.body.force;
-  console.log(branch);
   var commands =
     'git checkout ' + branch;
   let outdata = "";
@@ -343,7 +342,6 @@ app.post('/getListOfFilesCommit', function (req, res) {
 app.post('/push', function (req, res) {
   res.setHeader('Content-Type', 'application/text');
   let clonePath = req.body.folder;
-  console.log("push", clonePath);
   let commands = 'git push';
   let outdata = "";
   let options = {
