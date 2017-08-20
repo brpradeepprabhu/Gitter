@@ -89,9 +89,9 @@ app.post('/commit', function (req, res) {
 app.post('/checkout', function (req, res) {
   let clonePath = req.body.folder;
   let branch = req.body.branch;
-  let force = req.body.force;
+  let force = req.body.force;  
   var commands =
-    'git checkout ' + branch;
+    'git checkout ' + branch;  
   let outdata = "";
   var options = {
     cwd: clonePath,
