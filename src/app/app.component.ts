@@ -42,7 +42,7 @@ export class AppComponent implements AfterViewInit {
   commitDialog = false;
   commitMsg: string;
   branches = [];
-  currentWorkingDir = 'D:/Gitter';
+  currentWorkingDir = 'D:/test/gitter';
   currentBranch;
   currentBranchOrgin;
   pushCount = 0;
@@ -52,6 +52,7 @@ export class AppComponent implements AfterViewInit {
   growlMsg = [];
   commitPrevFiles = { hash: '', filesList: [], commitBy: '', commitDate: '' };
   commitSideShow = 'hide';
+  remotes = [];
   @ViewChild(AppGridComponent) dt: DataTable;
   constructor(private http: Http, private gitServ: GitService, private cdr: ChangeDetectorRef) {
 
@@ -192,6 +193,44 @@ export class AppComponent implements AfterViewInit {
       }
     });
   }
+  getRemoteBranches() {
+    this.gitServ.getRemoteBranches(this.currentWorkingDir).then((data: any) => {
+      this.remotes = [
+        {
+          label: 'remote',
+          icon: 'fa-tree',
+          items: [],
+          expanded: true,
+        }];
+      if (data !== 'error') {
+        const branchArray = data.split('\n');
+        for (let i = 1; i < branchArray.length; i++) {
+          if (branchArray[i].trim() !== '') {
+            const splitBranch = branchArray[i].split(' ');
+            const fontClass = (splitBranch[0] === '*') ? 'boldClass' : '';
+            if (splitBranch[0] === '*') {
+              this.currentBranch = splitBranch[1];
+            }
+            const branchText = branchArray[i].replace('*', '');
+            this.remotes[0].items.push({
+              label: branchText, styleClass: fontClass, command: (event) => {
+                console.log(event.item.label)
+                const branchArray = event.item.label.split('/');
+                this.gitServ.checkout(branchArray[branchArray.length - 1], this.currentWorkingDir).then(() => {
+                  this.refresh();
+                  this.growlMsg = [];
+                  this.growlMsg.push({ severity: 'success', summary: 'Branch checkout Successfully' });
+                });
+              }
+            });
+
+          }
+        }
+      } else {
+        this.displayAlert();
+      }
+    });
+  }
   getCurrentBranchOrgin() {
     this.gitServ.getCurrentBranchOrgin(this.currentWorkingDir).then((data: any) => {
       this.currentBranchOrgin = data;
@@ -284,12 +323,20 @@ export class AppComponent implements AfterViewInit {
       this.growlMsg.push({ severity: 'success', summary: 'Pushed Successfully' });
     });
   }
+  pull() {
+    this.gitServ.pull(this.currentWorkingDir).then(data => {
+      this.refresh();
+      this.growlMsg = [];
+      this.growlMsg.push({ severity: 'success', summary: 'pull Successfully' });
+    });
+  }
   refresh() {
     this.logs();
     this.unTrackedFiles();
     this.trackedFiles();
     this.getTags();
     this.getBranches();
+    this.getRemoteBranches();
     this.removeCodeContainer();
 
   }

@@ -196,6 +196,33 @@ app.post('/getBranches', function (req, res) {
     }
   });
 });
+app.post('/getRemoteBranches', function (req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  let clonePath = req.body.folder;
+  let commands = 'git branch -r';
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.json((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+  });
+});
 app.post('/getDiffFile', function (req, res) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
@@ -318,6 +345,33 @@ app.post('/push', function (req, res) {
   let clonePath = req.body.folder;
   console.log("push", clonePath);
   let commands = 'git push';
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.json((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+  });
+
+});
+app.post('/pull', function (req, res) {
+  res.setHeader('Content-Type', 'application/text');
+  let clonePath = req.body.folder;
+  let commands = 'git pull';
   let outdata = "";
   let options = {
     cwd: clonePath,

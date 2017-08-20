@@ -61,6 +61,12 @@ export class GitService {
       .catch(this.handleError);
 
   }
+  getRemoteBranches(currentWorkingDir): Promise<any> {
+    return this.http.post(environment.serverurl + 'getRemoteBranches ', { folder: currentWorkingDir }).toPromise()
+      .then((data: any) => { return this.parseData(data._body); })
+      .catch(this.handleError);
+
+  }
   getDiffFile(fileName, currentWorkingDir, staged: boolean): Promise<any> {
     return this.http.post(environment.serverurl + 'getDiffFile ', { fileName: fileName, folder: currentWorkingDir, staged: staged }).toPromise()
       .then((data: any) => { return this.parseData(data._body); })
@@ -83,6 +89,12 @@ export class GitService {
   };
   push(currentWorkingDir: string): Promise<any> {
     return this.http.post(environment.serverurl + 'push ', { folder: currentWorkingDir }).toPromise()
+      .then((data: any) => { return (data._body); })
+      .catch(this.handleError);
+
+  }
+  pull(currentWorkingDir: string): Promise<any> {
+    return this.http.post(environment.serverurl + 'pull ', { folder: currentWorkingDir }).toPromise()
       .then((data: any) => { return (data._body); })
       .catch(this.handleError);
 
