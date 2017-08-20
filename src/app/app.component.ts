@@ -140,6 +140,18 @@ export class AppComponent implements AfterViewInit {
       }
     });
   }
+  discardAll() {
+    this.gitServ.discardAll(this.currentWorkingDir).then((data: any) => {
+      this.commitDialog = false;
+      if (data !== 'error') {
+        this.refresh();
+        this.growlMsg = [];
+        this.growlMsg.push({ severity: 'success', summary: 'Discarded files Successfully', sticky: false, life: 1000 });
+      } else {
+        this.displayAlert();
+      }
+    });
+  }
   displayAlert(msg?: any) {
     const message = (msg !== undefined) ? msg : 'error';
     alert(message);

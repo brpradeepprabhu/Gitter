@@ -28,6 +28,11 @@ export class GitService {
       .then((data) => { return data; })
       .catch(this.handleError);
   }
+  discardAll(folderPath: string): Promise<any> {
+    return this.http.post(environment.serverurl + 'discardAll', { folder: folderPath }).toPromise()
+      .then((data) => { return data; })
+      .catch(this.handleError);
+  }
   getListOfFilesCommit(commitId: string, folderPath: string) {
     return this.http.post(environment.serverurl + 'getListOfFilesCommit', { commitid: commitId, folder: folderPath }).toPromise()
       .then((data: any) => { return this.parseData(data._body); })

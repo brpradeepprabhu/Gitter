@@ -3,16 +3,40 @@ var app = express();
 var cors = require('cors');
 var nrc = require('node-run-cmd');
 var shellParser = require('node-shell-parser');
-var Promise = require("bluebird");
-var cmd = require('node-cmd');
+
 app.use(cors());
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
 
-var child;
 app.get('/', function (req, res) {
 
+
+});
+app.post('/discardAll', function (req, res) {
+  let clonePath = req.body.folder;
+  let message = req.body.message;
+  var commands = ["git checkout .", "git clean -f"];
+  let outdata = "";
+  var options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes != 0) {
+      res.send("error");
+    } else {
+      res.send("success");
+    }
+  }, function (err) {
+    res.send(err);
+  });;
 
 })
 app.post('/clone', function (req, res) {
@@ -90,7 +114,7 @@ app.post('/checkout', function (req, res) {
   });;
 
 });
-app.post('/folderCheck', function (req, res, next) {
+app.post('/folderCheck', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   let clonePath = req.body.folder;
   let commands = 'git rev-parse --is-inside-work-tree';
@@ -117,7 +141,7 @@ app.post('/folderCheck', function (req, res, next) {
   });
 
 });
-app.post('/getTags', function (req, res, next) {
+app.post('/getTags', function (req, res) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
   let commands = 'git tag';
@@ -145,7 +169,7 @@ app.post('/getTags', function (req, res, next) {
 
   });
 });
-app.post('/getBranches', function (req, res, next) {
+app.post('/getBranches', function (req, res) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
   let commands = 'git branch';
@@ -172,7 +196,7 @@ app.post('/getBranches', function (req, res, next) {
     }
   });
 });
-app.post('/getDiffFile', function (req, res, next) {
+app.post('/getDiffFile', function (req, res) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
   let fileName = req.body.fileName;
@@ -202,7 +226,7 @@ app.post('/getDiffFile', function (req, res, next) {
 
   });
 });
-app.post('/getPushCount', function (req, res, next) {
+app.post('/getPushCount', function (req, res) {
   res.setHeader('Content-Type', 'application/text');
   let clonePath = req.body.folder;
   let currentBranch = req.body.branch;
@@ -232,7 +256,7 @@ app.post('/getPushCount', function (req, res, next) {
   });
 
 });
-app.post('/getCurrentBranchOrgin', function (req, res, next) {
+app.post('/getCurrentBranchOrgin', function (req, res) {
   res.setHeader('Content-Type', 'application/text');
   let clonePath = req.body.folder;
   let currentBranch = req.body.branch;
@@ -261,7 +285,7 @@ app.post('/getCurrentBranchOrgin', function (req, res, next) {
   });
 
 });
-app.post('/getListOfFilesCommit', function (req, res, next) {
+app.post('/getListOfFilesCommit', function (req, res) {
   res.setHeader('Content-Type', 'application/text');
   let clonePath = req.body.folder;
   let commitid = req.body.commitid;
@@ -289,7 +313,7 @@ app.post('/getListOfFilesCommit', function (req, res, next) {
   });
 
 });
-app.post('/push', function (req, res, next) {
+app.post('/push', function (req, res) {
   res.setHeader('Content-Type', 'application/text');
   let clonePath = req.body.folder;
   console.log("push", clonePath);
@@ -317,7 +341,7 @@ app.post('/push', function (req, res, next) {
   });
 
 });
-app.post('/log', function (req, res, next) {
+app.post('/log', function (req, res) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
   let commands = 'git log --pretty=format:%h%x09%x09%cn%x09%x09%ci%x09%x09%s$$$';
@@ -347,7 +371,7 @@ app.post('/log', function (req, res, next) {
   });
 
 });
-app.post('/stageAll', function (req, res, next) {
+app.post('/stageAll', function (req, res) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
   let commands = 'git add .';
@@ -377,7 +401,7 @@ app.post('/stageAll', function (req, res, next) {
   });
 
 });
-app.post('/tracked', function (req, res, next) {
+app.post('/tracked', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   let clonePath = req.body.folder;
   commands = ' git diff --staged --name-status';
@@ -403,7 +427,7 @@ app.post('/tracked', function (req, res, next) {
     }
   });
 })
-app.post('/unStageAll', function (req, res, next) {
+app.post('/unStageAll', function (req, res) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
   let commands = 'git reset';
@@ -432,7 +456,7 @@ app.post('/unStageAll', function (req, res, next) {
   });
 
 });
-app.post('/untracked', function (req, res, next) {
+app.post('/untracked', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   let clonePath = req.body.folder;
   commands = ' git status -s';
