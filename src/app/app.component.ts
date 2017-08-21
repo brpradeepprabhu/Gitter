@@ -145,8 +145,7 @@ export class AppComponent implements AfterViewInit {
     this.gitServ.discardAll(this.currentWorkingDir).then((data: any) => {
       this.commitDialog = false;
       if (data !== 'error') {
-        this.refresh();
-        this.logs();
+        this.refresh();      
         this.growlMsg = [];
         this.growlMsg.push({ severity: 'success', summary: 'Discarded files Successfully', sticky: false, life: 1000 });
       } else {
@@ -164,6 +163,7 @@ export class AppComponent implements AfterViewInit {
     this.gitServ.fetch(this.currentWorkingDir).then((data: any) => {
 
       if (data !== 'error') {
+        this.logs();
         this.getTags();
         this.getBranches();
         this.getRemoteBranches();
