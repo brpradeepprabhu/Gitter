@@ -181,6 +181,9 @@ export class AppComponent implements AfterViewInit {
               label: branchText, styleClass: fontClass, command: (event) => {
                 this.gitServ.checkout(event.item.label, this.currentWorkingDir).then(() => {
                   this.refresh();
+                  this.growlMsg = [];
+                  this.growlMsg.push({ severity: 'success', summary: 'Branch checkout Successfully' });
+
                 });
               }
             });
@@ -234,7 +237,7 @@ export class AppComponent implements AfterViewInit {
   getCurrentBranchOrgin() {
     this.gitServ.getCurrentBranchOrgin(this.currentWorkingDir).then((data: any) => {
       this.currentBranchOrgin = data;
-      this.getPushCount();  
+      this.getPushCount();
     });
   }
   getDiffFile(fileName, staged: boolean = false) {
