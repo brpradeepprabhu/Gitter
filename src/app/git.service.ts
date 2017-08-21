@@ -43,6 +43,11 @@ export class GitService {
       .then((data: any) => { return data._body; })
       .catch(this.handleError);
   }
+  fetch(existingFolder: string): Promise<any> {
+    return this.http.post(environment.serverurl + 'fetch', { folder: existingFolder }).toPromise()
+      .then((data: any) => { return data._body; })
+      .catch(this.handleError);
+  }
   logs(currentWorkingDir): Promise<any> {
     return this.http.post(environment.serverurl + 'log ', { folder: currentWorkingDir }).toPromise()
       .then((data) => { return data; })

@@ -89,9 +89,9 @@ app.post('/commit', function (req, res) {
 app.post('/checkout', function (req, res) {
   let clonePath = req.body.folder;
   let branch = req.body.branch;
-  let force = req.body.force;  
+  let force = req.body.force;
   var commands =
-    'git checkout ' + branch;  
+    'git checkout ' + branch;
   let outdata = "";
   var options = {
     cwd: clonePath,
@@ -111,6 +111,33 @@ app.post('/checkout', function (req, res) {
   }, function (err) {
     res.send(err);
   });;
+
+});
+app.post('/fetch', function (req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  let clonePath = req.body.folder;
+  let commands = 'git fetch';
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.send((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+  });
 
 });
 app.post('/folderCheck', function (req, res) {

@@ -146,6 +146,7 @@ export class AppComponent implements AfterViewInit {
       this.commitDialog = false;
       if (data !== 'error') {
         this.refresh();
+        this.logs();
         this.growlMsg = [];
         this.growlMsg.push({ severity: 'success', summary: 'Discarded files Successfully', sticky: false, life: 1000 });
       } else {
@@ -155,7 +156,22 @@ export class AppComponent implements AfterViewInit {
   }
   displayAlert(msg?: any) {
     const message = (msg !== undefined) ? msg : 'error';
-    alert(message);
+    this.growlMsg = [];
+    this.growlMsg.push({ severity: 'error', summary: message, sticky: false, life: 5000 });
+
+  }
+  fetch() {
+    this.gitServ.fetch(this.currentWorkingDir).then((data: any) => {
+
+      if (data !== 'error') {
+        this.getTags();
+        this.getBranches();
+        this.getRemoteBranches();
+        this.removeCodeContainer();
+      } else {
+        this.displayAlert();
+      }
+    });
   }
   getBranches() {
     this.gitServ.getBranches(this.currentWorkingDir).then((data: any) => {
@@ -269,7 +285,7 @@ export class AppComponent implements AfterViewInit {
         const pushPullArray = data.split('	');
         this.pushCount = pushPullArray[0];
         this.pullCount = pushPullArray[1];
-        console.log("push count",pushPullArray)
+        console.log("push count", pushPullArray)
       });
     }
   }
@@ -338,10 +354,7 @@ export class AppComponent implements AfterViewInit {
     this.logs();
     this.unTrackedFiles();
     this.trackedFiles();
-    this.getTags();
-    this.getBranches();
-    this.getRemoteBranches();
-    this.removeCodeContainer();
+    this.fetch();
 
   }
   stageAllClicked() {
