@@ -163,7 +163,7 @@ export class AppComponent implements AfterViewInit {
     this.gitServ.fetch(this.currentWorkingDir).then((data: any) => {
 
       if (data !== 'error') {
-        this.logs();
+        this.logs();  
         this.getTags();
         this.getBranches();
         this.getRemoteBranches();
