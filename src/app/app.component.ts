@@ -269,6 +269,7 @@ export class AppComponent implements AfterViewInit {
         const pushPullArray = data.split('	');
         this.pushCount = pushPullArray[0];
         this.pullCount = pushPullArray[1];
+        console.log("push count",pushPullArray)
       });
     }
   }
