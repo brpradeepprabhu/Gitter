@@ -61,7 +61,12 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.resizeWindow();
     window.addEventListener('resize', this.resizeWindow.bind(this));
-    this.refresh();
+    if (localStorage.getItem("currentWorkingDir")) {
+      this.currentWorkingDir = localStorage.getItem("currentWorkingDir");
+      this.refresh();
+    } else {
+      this.cloneClick();
+    }
   }
 
   resizeWindow() {
@@ -81,6 +86,7 @@ export class AppComponent implements AfterViewInit {
         if (data !== 'error') {
           this.currentWorkingDir = this.existingFolder;
           this.cloneDialog = false;
+          localStorage.setItem('currentWorkingDir', this.currentWorkingDir);
           this.refresh();
         } else {
           this.displayAlert();
