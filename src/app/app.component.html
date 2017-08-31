@@ -120,7 +120,7 @@
   <p-tabView>
     <p-tabPanel header="Clone Repository">
       <input pInputText type="text" [(ngModel)]="clonePath" placeholder="Clone URL">
-      <input pInputText type="text" [(ngModel)]="folderPath" placeholder="Folder URL">
+      <input type="file" webkitdirectory [(ngModel)]="folderPath" placeholder="Folder URL">
       <button pButton (click)="clone()" label="Clone"></button>
     </p-tabPanel>
     <p-tabPanel header="Browse Existing">
@@ -141,7 +141,7 @@
 <div class="commitSideBar" [@display]="commitSideShow">
   <div class="backgroundColor col-xs-12">
     <h4 class="col-xs-10">{{commitPrevFiles.hash}}</h4>
-    <div class="pull-right" style="margin-top:5px" (click)="commitSideShow='hide'"><span><i class="fa fa-close fa-2x"></i></span></div>
+    <div class="pull-right" style="margin-top:5px;cursor:pointer" (click)="commitSideShow='hide'"><span><i class="fa fa-close fa-2x"></i></span></div>
   </div>
 
   <div class="commitFiles col-xs-12 " style="margin:10px 0;padding:10px">
@@ -154,11 +154,10 @@
   <div>
     <h5></h5>
   </div>
-  <h4 style="padding: 10px;">Names</h4>
-  <div class="commitFiles" style="position:absolute;width:97%;height:80%;overflow:auto;">
-    <div *ngFor="let files of commitPrevFiles.filesList"  class="filesList">
+  <h4 style="padding: 10px;">File Names</h4>
+  <div class="commitFiles sideBarFileList">
+    <div *ngFor="let files of commitPrevFiles.filesList" class="filesList">
       {{files}}
     </div>
   </div>
 </div>
-

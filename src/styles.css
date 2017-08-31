@@ -118,6 +118,7 @@ body {
 
 .navbar-nav>li {
   text-align: center;
+  cursor: pointer;
 }
 
 .navbar-nav>li:hover {
@@ -196,11 +197,15 @@ body {
   border-bottom: 1px solid black;
 }
 
+.sideBarFileList {
+  position: absolute;
+  width: 97%;
+  height: 80%;
+  overflow: auto;
+}
+
 @media (min-width:768px) {
   .refreshBtn {
     float: right !important;
   }
 }
-
-
-   

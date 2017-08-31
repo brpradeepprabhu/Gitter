@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "ng test",
-    "start": "nodemon server/index.js",
+    "start": "nodemon src/server/server.js",
     "ng": "ng",
     "serve": "ng serve",
     "build": "ng build",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "dev": "npm run serve && npm run start",
+    "build-electron": "ng build --base-href . && copy src\\electron\\* dist && copy src\\server\\* dist",
+    "electron": "npm run build-electron && electron dist"
   },
   "repository": {
     "type": "git",
