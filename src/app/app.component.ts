@@ -61,8 +61,8 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.resizeWindow();
     window.addEventListener('resize', this.resizeWindow.bind(this));
-    if (localStorage.getItem("currentWorkingDir")) {
-      this.currentWorkingDir = localStorage.getItem("currentWorkingDir");
+    if (localStorage.getItem('currentWorkingDir')) {
+      this.currentWorkingDir = localStorage.getItem('currentWorkingDir');
       this.refresh();
     } else {
       this.cloneClick();
@@ -290,7 +290,7 @@ export class AppComponent implements AfterViewInit {
         const pushPullArray = data.split('	');
         this.pushCount = pushPullArray[0];
         this.pullCount = pushPullArray[1];
-        console.log("push count", pushPullArray)
+        console.log('push count', pushPullArray)
       });
     }
   }
@@ -374,6 +374,18 @@ export class AppComponent implements AfterViewInit {
       }
     });
   }
+  stageFile(fileName, fileStatus) {
+    this.gitServ.stageSelectedFile(this.currentWorkingDir, this.currentWorkingDir + '/' + fileName).then((data: any) => {
+      if (data !== 'error') {
+        this.refresh();
+        this.growlMsg = [];
+        this.growlMsg.push({ severity: 'success', summary: 'Stage All Files  Successfully' });
+        //  this.growlMsg.push({ severity: 'success', summary: 'Success Message', detail: 'Order submitted' });
+      } else {
+        this.displayAlert();
+      }
+    });
+  }
   trackedFiles() {
     this.gitServ.trackedFile(this.currentWorkingDir).then((data: any) => {
       this.trackedList = [];
@@ -391,6 +403,19 @@ export class AppComponent implements AfterViewInit {
 
           }
         }
+      } else {
+        this.displayAlert();
+      }
+    });
+  }
+  undoFile(fileName, fileStatus) {
+    console.log(fileName)
+    this.gitServ.discardFile(this.currentWorkingDir, '/' + fileName).then((data: any) => {
+      if (data !== 'error') {
+        this.refresh();
+        this.growlMsg = [];
+        //  this.growlMsg.push({ severity: 'success', summary: 'Success Message', detail: 'Order submitted' });
+        this.growlMsg.push({ severity: 'success', summary: 'UnStaged files  Successfully', sticky: false, life: 1000 });
       } else {
         this.displayAlert();
       }

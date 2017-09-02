@@ -13,10 +13,37 @@ app.get('/', function (req, res) {
 
 
 });
+
 app.post('/discardAll', function (req, res) {
   let clonePath = req.body.folder;
-  let message = req.body.message;
   var commands = ["git checkout .", "git clean -f"];
+  let outdata = "";
+  var options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes != 0) {
+      res.send("error");
+    } else {
+      res.send("success");
+    }
+  }, function (err) {
+    res.send(err);
+  });;
+
+})
+app.post('/discardFile', function (req, res) {
+  let clonePath = req.body.folder;
+  let fileName = req.body.fileName;
+  var commands = "git checkout -q -- " + fileName;
+  console.log(commands);
   let outdata = "";
   var options = {
     cwd: clonePath,
@@ -454,6 +481,38 @@ app.post('/stageAll', function (req, res) {
   res.setHeader('Content-Type', 'text/plain');
   let clonePath = req.body.folder;
   let commands = 'git add .';
+  let outdata = "";
+  let options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+
+    },
+    onError: (err) => {
+      outdata = "error";
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+
+    if (exitCodes == 0) {
+      if (outdata !== "error") {
+        res.send((outdata));
+      } else {
+        res.send("error");
+      }
+    } else {
+      res.send("error");
+    }
+
+  });
+
+});
+app.post('/stageSelectedFile', function (req, res) {
+  res.setHeader('Content-Type', 'text/plain');
+  let clonePath = req.body.folder;
+  let fileName = req.body.fileName;
+  let commands = 'git add -A -- ' + fileName;
+  console.log(commands);
   let outdata = "";
   let options = {
     cwd: clonePath,

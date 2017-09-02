@@ -33,6 +33,11 @@ export class GitService {
       .then((data) => { return data; })
       .catch(this.handleError);
   }
+  discardFile(folderPath: string, fileName: string): Promise<any> {
+    return this.http.post(environment.serverurl + 'discardFile', { folder: folderPath, fileName: folderPath + fileName }).toPromise()
+      .then((data) => { return data; })
+      .catch(this.handleError);
+  }
   getListOfFilesCommit(commitId: string, folderPath: string) {
     return this.http.post(environment.serverurl + 'getListOfFilesCommit', { commitid: commitId, folder: folderPath }).toPromise()
       .then((data: any) => { return this.parseData(data._body); })
@@ -106,6 +111,12 @@ export class GitService {
   }
   stageAll(currentWorkingDir: string): Promise<any> {
     return this.http.post(environment.serverurl + 'stageAll ', { folder: currentWorkingDir }).toPromise()
+      .then((data: any) => { return (data._body); })
+      .catch(this.handleError);
+
+  }
+  stageSelectedFile(currentWorkingDir: string, fileName: string): Promise<any> {
+    return this.http.post(environment.serverurl + 'stageSelectedFile ', { folder: currentWorkingDir, fileName: fileName }).toPromise()
       .then((data: any) => { return (data._body); })
       .catch(this.handleError);
 

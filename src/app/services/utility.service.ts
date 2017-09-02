@@ -3,7 +3,7 @@ import { Injectable, ElementRef } from '@angular/core';
  * Common functionalities of angular1
  */
 @Injectable()
-
+  
 export class UtilityService {
     /**
      * Initalize the common handler
