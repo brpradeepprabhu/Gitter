@@ -66,6 +66,33 @@ app.post('/discardFile', function (req, res) {
   });;
 
 })
+app.post('/discardStagedFile', function (req, res) {
+  let clonePath = req.body.folder;
+  let fileName = req.body.fileName;
+  var commands = "git checkout -q HEAD -- " + fileName;
+  console.log(commands);
+  let outdata = "";
+  var options = {
+    cwd: clonePath,
+    onData: (data) => {
+      outdata += data;
+    },
+    onError: (err) => {
+      outdata = "error";
+
+    }
+  };
+  nrc.run(commands, options).then(function (exitCodes) {
+    if (exitCodes != 0) {
+      res.send("error");
+    } else {
+      res.send("success");
+    }
+  }, function (err) {
+    res.send(err);
+  });;
+
+})
 app.post('/clone', function (req, res) {
   let cloneUrl = req.body.url;
   let clonePath = req.body.folder;

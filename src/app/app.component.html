@@ -86,7 +86,9 @@
         <div class="ui-grid-col-12 overflowScroll" style="height:80%;">
           <div class="col-xs-12 filesList" *ngFor="let files of trackedList" (click)="getDiffFile(files.fileName,true)">
             <div class="col-xs-1">{{files.status}}</div>
-            <div class=" col-xs-11"><span style="cursor: pointer;">{{files.fileName}} </span></div>
+            <div class=" col-xs-10"><span style="cursor: pointer;">{{files.fileName}} </span></div>
+            <div class=" col-xs-1" (click)="undoStagedFile(files.fileName,files.status)"><span><i class="fa fa-minus"></i></span></div>
+
           </div>
         </div>
       </div>

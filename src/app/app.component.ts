@@ -415,6 +415,19 @@ export class AppComponent implements AfterViewInit {
         this.refresh();
         this.growlMsg = [];
         //  this.growlMsg.push({ severity: 'success', summary: 'Success Message', detail: 'Order submitted' });
+        this.growlMsg.push({ severity: 'success', summary: 'Undo files  Successfully', sticky: false, life: 1000 });
+      } else {
+        this.displayAlert();
+      }
+    });
+  }
+  undoStagedFile(fileName, fileStatus) {
+    console.log(fileName)
+    this.gitServ.discardStagedFile(this.currentWorkingDir, '/' + fileName).then((data: any) => {
+      if (data !== 'error') {
+        this.refresh();
+        this.growlMsg = [];
+        //  this.growlMsg.push({ severity: 'success', summary: 'Success Message', detail: 'Order submitted' });
         this.growlMsg.push({ severity: 'success', summary: 'UnStaged files  Successfully', sticky: false, life: 1000 });
       } else {
         this.displayAlert();
